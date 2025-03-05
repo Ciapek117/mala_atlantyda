@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1049145244016",
+    "project_id": "malaatlanty",
+    "storage_bucket": "malaatlanty.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1049145244016:android:64d3cc53db7ea1dd34b7b5",
+        "android_client_info": {
+          "package_name": "com.example.mala_atlantyda"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBYoygkrKIYEk-lNqVnGn3cpG-lTB7pHds"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

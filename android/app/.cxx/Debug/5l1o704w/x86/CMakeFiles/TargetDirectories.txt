@@ -1,0 +1,2 @@
+D:/mala_atlantyda/android/app/.cxx/Debug/5l1o704w/x86/CMakeFiles/edit_cache.dir
+D:/mala_atlantyda/android/app/.cxx/Debug/5l1o704w/x86/CMakeFiles/rebuild_cache.dir
