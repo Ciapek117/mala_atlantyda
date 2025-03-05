@@ -44,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Center(
         child: ElevatedButton(
           onPressed: login,
-          child: Text("Zaloguj testowo"),
+          child: Text("Zaloguj testowo!"),
         ),
       ),
     );
