@@ -1,0 +1,2 @@
+C:/Users/Dell/mala_atlantyda/android/app/.cxx/Debug/6vj4g2p5/x86/CMakeFiles/edit_cache.dir
+C:/Users/Dell/mala_atlantyda/android/app/.cxx/Debug/6vj4g2p5/x86/CMakeFiles/rebuild_cache.dir
