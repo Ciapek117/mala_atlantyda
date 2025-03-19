@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 void main() {
@@ -22,98 +24,117 @@ class UserPage extends StatefulWidget {
 class _UserPageState extends State<UserPage> {
   final List<String> questions = List.generate(14, (index) => "Pytanie ${index + 1}");
   final String targetWord = "SZTORMOWY SZLAK";
-  List<bool> isQuestionClicked = List.generate(14, (index) => false); // Lista do śledzenia kliknięć
-  int currentLetterIndex = 0; // Indeks aktualnie odkrywanej literki
+  List<bool> isQuestionClicked = List.generate(14, (index) => false);
+  int currentLetterIndex = 0;
 
-  // Funkcja do odkrywania literki
   void _addLetter(int index) {
-    if (!isQuestionClicked[index] && currentLetterIndex < targetWord.length) {
+    if (!isQuestionClicked[index] && currentLetterIndex < targetWord.replaceAll(' ', '').length) {
       setState(() {
-        // Oznacz pytanie jako kliknięte
         isQuestionClicked[index] = true;
-
-        // Przesuń indeks, aby pominąć spacje
-        while (currentLetterIndex < targetWord.length && targetWord[currentLetterIndex] == ' ') {
-          currentLetterIndex++;
-        }
-
-        // Jeśli nie przekroczono długości hasła, odkryj literkę
-        if (currentLetterIndex < targetWord.length) {
-          currentLetterIndex++;
-        }
+        currentLetterIndex++;
       });
     }
   }
 
-  // Funkcja do wyświetlania hasła
-  String _getDisplayedWord() {
-    String displayedWord = "";
+  List<String> _getDisplayedWord() {
+    List<String> words = targetWord.split(' ');
+    List<String> revealedWords = [];
+
     int revealedCount = 0;
 
-    for (int i = 0; i < targetWord.length; i++) {
-      if (targetWord[i] == ' ') {
-        revealedCount++;
-        displayedWord += ' '; // Spacje są zawsze widoczne
-      } else if (revealedCount < currentLetterIndex && targetWord[i] != ' ') {
-        displayedWord += targetWord[i]; // Odkryte literki
-        revealedCount++;
-      } else {
-        displayedWord += "_"; // Nieodkryte literki
+    for (var word in words) {
+      String revealedWord = "";
+      for (int i = 0; i < word.length; i++) {
+        if (revealedCount < currentLetterIndex) {
+          revealedWord += word[i];
+          revealedCount++;
+        } else {
+          revealedWord += "_ ";
+        }
       }
+      revealedWords.add(revealedWord);
     }
 
-    return displayedWord;
+    return revealedWords;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.lightBlue,
-      body: Column(
-        children: [
-          SizedBox(height: 50,),
-          // Lista pytań
-          Container(
-            height: 100,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: questions.length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
-                    onPressed: () => _addLetter(index), // Przekazujemy indeks pytania
-                    child: Text(questions[index], style: TextStyle(color: Colors.white),),
-                    style: ElevatedButton.styleFrom(
-                      textStyle: TextStyle(color: Colors.white),
-                      backgroundColor: isQuestionClicked[index] ? Colors.blueAccent : Colors.lightBlueAccent, // Zmiana koloru po kliknięciu
-                    ),
+      backgroundColor: Color(0xFF0c4767),
+      appBar: AppBar(
+        title: Text(
+          "Odkryj Hasło",
+          style: TextStyle(color: Color(0xFFEFA00B), fontWeight: FontWeight.bold,),
+        ),
+        backgroundColor: Color(0xFF0a344a),
+        iconTheme: IconThemeData(color: Color(0xFFEFA00B)),
+      ),
+      drawer: Drawer(
+        backgroundColor: Color(0xFF0a344a),
+        child: Column(
+          children: [
+            SizedBox(height: 20),
+            // Mniejszy header
+            Container(
+              height: 150.0, // Wysokość zmniejszona
+              color: Color(0xFF0a344a),
+              child: SizedBox(
+                child: Center(
+                  child: Text(
+                    "Wybierz pytanie",
+                    style: TextStyle(fontSize: 30, color: Colors.white),
                   ),
-                );
-              },
+                ),
+              ),
             ),
-          ),
-          Spacer(), //TODO MIEJSCE NA MAPE
-          // Wyświetlanie hasła z podziałem na linie
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Wrap(
-              alignment: WrapAlignment.center,
-              spacing: 8.0, // Odstęp między literkami
-              runSpacing: 8.0, // Odstęp między liniami
-              children: _getDisplayedWord().split('').map((letter) {
-                return Text(
-                  letter,
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: letter == '_' ? Colors.black : Colors.white, // Kolor dla nieodkrytych liter
-                  ),
-                );
-              }).toList(),
+            Expanded(
+              child: ListView.builder(
+                itemCount: questions.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(questions[index]),
+                    tileColor: isQuestionClicked[index] ? Color(0Xff566E3D) : Color(0xFF75AEEB),
+                    textColor: Colors.white,
+                    onTap: () {
+                      _addLetter(index);
+                      Navigator.pop(context);
+                    },
+                  );
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center, // Wyśrodkowanie w pionie
+          children: [
+            SizedBox(height: 20),
+            Text("HASŁO: ", style: TextStyle(
+              fontSize: 40,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFFEFA00B),
+            ),),
+            ..._getDisplayedWord().map((line) {
+              return Text(
+                line,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 40,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFFAFCBFF),
+                ),
+              );
+            }).toList(),
+            Container(
+              child: SizedBox(
+                height: 500,
+              ),
+            )// Teraz działa poprawnie
+          ],
+        ),
       ),
     );
   }
