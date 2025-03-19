@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:mala_atlantyda/pages/map_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -111,7 +112,6 @@ class _UserPageState extends State<UserPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center, // Wyśrodkowanie w pionie
           children: [
-            SizedBox(height: 20),
             Text("HASŁO: ", style: TextStyle(
               fontSize: 40,
               fontWeight: FontWeight.bold,
@@ -128,11 +128,13 @@ class _UserPageState extends State<UserPage> {
                 ),
               );
             }).toList(),
+            SizedBox(height: 50),
             Container(
               child: SizedBox(
                 height: 500,
+                child: MapPage(),
               ),
-            )// Teraz działa poprawnie
+            )
           ],
         ),
       ),
