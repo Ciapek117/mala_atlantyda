@@ -3,6 +3,8 @@ import 'dart:ui' as ui;
 import 'dart:async';
 import 'dart:math';
 
+import '../auth/UserPage.dart';
+
 void main() {
   runApp(PuzzleApp());
 }
@@ -75,17 +77,65 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
       tileOrder[fromIndex] = tileOrder[toIndex];
       tileOrder[toIndex] = temp;
     });
+
+    if (_isPuzzleSolved()) {
+      _showWinDialog();
+    }
+  }
+
+  bool _isPuzzleSolved() {
+    for (int i = 0; i < tileOrder.length; i++) {
+      if (tileOrder[i] != i) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  void _showWinDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text("Gratulacje!"),
+        content: Text("Ułożyłeś puzzle poprawnie!"),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+            },
+            child: Text("OK"),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Puzzle Game")),
+      backgroundColor: Color(0xFF0c4767),
+      appBar: AppBar(
+        title: Text(
+          "Odkryj Hasło",
+          style: TextStyle(color: Color(0xFF0c4767), fontWeight: FontWeight.bold,),
+        ),
+        backgroundColor: Color(0xFF0c4767),
+        iconTheme: IconThemeData(color: Color(0xFFEFA00B)),
+      ),
       body: Column(
         children: [
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
+          SizedBox(height: 20),
+          Text("Ułóż Puzle!", style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Color(0xFFEFA00B))),
+          SizedBox(height: 10),
+          Container(
+            margin: EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(2.0),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black, width: 4),
+            ),
+            child: AspectRatio(
+              aspectRatio: 1,
               child: GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: gridSize,
@@ -96,10 +146,6 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
                 },
               ),
             ),
-          ),
-          ElevatedButton(
-            onPressed: _initializeTiles,
-            child: Text("Shuffle"),
           ),
         ],
       ),
@@ -112,28 +158,32 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
     int tileIndex = tileOrder[index];
     Rect sourceRect = tilePositions[tileIndex]!;
 
-    return Draggable<int>(
-      data: index,
-      child: DragTarget<int>(
-        onAccept: (fromIndex) {
-          _onTileDragged(fromIndex, index);
-        },
-        builder: (context, candidateData, rejectedData) {
-          return CustomPaint(
+    return DragTarget<int>(
+      onWillAccept: (fromIndex) => true,
+      onAccept: (fromIndex) {
+        _onTileDragged(fromIndex, index);
+      },
+      builder: (context, candidateData, rejectedData) {
+        return Draggable<int>(
+          data: index,
+          feedback: Opacity(
+            opacity: 0.7,
+            child: CustomPaint(
+              size: Size(100, 100),
+              painter: PuzzleTilePainter(image!, sourceRect),
+            ),
+          ),
+          childWhenDragging: Container(
+            color: Colors.grey,
+            width: 100,
+            height: 100,
+          ),
+          child: CustomPaint(
             size: Size(100, 100),
             painter: PuzzleTilePainter(image!, sourceRect),
-          );
-        },
-      ),
-      feedback: CustomPaint(
-        size: Size(100, 100),
-        painter: PuzzleTilePainter(image!, sourceRect),
-      ),
-      childWhenDragging: Container(
-        color: Colors.grey,
-        width: 100,
-        height: 100,
-      ),
+          ),
+        );
+      },
     );
   }
 }
@@ -158,6 +208,6 @@ class PuzzleTilePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return false;
+    return true;
   }
 }

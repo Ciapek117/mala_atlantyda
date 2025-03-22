@@ -3,6 +3,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:mala_atlantyda/pages/map_page.dart';
 
+import '../pages/JigsawPuzzlePage.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -98,10 +100,24 @@ class _UserPageState extends State<UserPage> {
                     tileColor: isQuestionClicked[index] ? Color(0Xff566E3D) : Color(0xFF75AEEB),
                     textColor: Colors.white,
                     onTap: () {
-                      _addLetter(index);
-                      Navigator.pop(context);
+                      Navigator.pop(context); // Zamknij drawer przed nawigacją
+                      if (index == 0) {
+                        Future.delayed(Duration(milliseconds: 300), () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => PuzzleApp()),
+                          );
+                          _addLetter(index);
+
+                        });
+                      } else {
+                        _addLetter(index);
+                      }
                     },
+
+
                   );
+
                 },
               ),
             ),
