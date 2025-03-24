@@ -26,7 +26,9 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserPageState extends State<UserPage> {
-  final List<String> questions = List.generate(14, (index) => "Pytanie ${index + 1}");
+  final List<String> questions = List.generate(14, (index) => "Zadanie ${index + 1}")
+    ..[0] = "Zejście Plaża (Puzzle)"
+    ..[1] = "Dworzec (Wisielec)";
   final String targetWord = "SZTORMOWY SZLAK";
   List<bool> isQuestionClicked = List.generate(14, (index) => false);
   int currentLetterIndex = 0;
@@ -86,7 +88,7 @@ class _UserPageState extends State<UserPage> {
               child: SizedBox(
                 child: Center(
                   child: Text(
-                    "Wybierz pytanie",
+                    "Wybierz zadanie",
                     style: TextStyle(fontSize: 30, color: Colors.white),
                   ),
                 ),

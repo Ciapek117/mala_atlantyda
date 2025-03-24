@@ -56,18 +56,21 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              child: (Text("Tekst")),
+              child: (Text("Zaloguj się")),
               onPressed: () => login("6TVB9L"),
             ),
             const SizedBox(height: 5),
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               const SizedBox(height: 30),
+              /*
               const Text("Don't have an account yet? ", style: TextStyle(color: Colors.white),),
+
               InkWell(
                 //onTap: () => goToSignup(context),
                 child:
                 const Text("Signup", style: TextStyle(color: Color(0xFFD2AF43))),
               )
+              */
             ]),
             const Spacer()
           ],
