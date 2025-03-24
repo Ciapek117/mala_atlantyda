@@ -39,6 +39,7 @@ dependencies:
   firebase_auth: ^5.5.1
   google_fonts: ^6.2.1
   image: ^4.5.3
+  lottie: ^3.3.1
 
 dev_dependencies:
   flutter_test:
@@ -66,6 +67,7 @@ flutter:
   assets:
      - images/
      - images/puzle_plaza.jpg
+     - assets/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

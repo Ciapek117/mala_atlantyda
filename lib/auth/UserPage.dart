@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:mala_atlantyda/pages/HangmanGame.dart';
 import 'package:mala_atlantyda/pages/map_page.dart';
 
 import '../pages/JigsawPuzzlePage.dart';
@@ -110,7 +111,16 @@ class _UserPageState extends State<UserPage> {
                           _addLetter(index);
 
                         });
-                      } else {
+                      } else if(index == 1){
+                        Future.delayed(Duration(milliseconds: 300), () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => HangmanGame()),
+                          );
+                        });
+                      }
+                      else {
                         _addLetter(index);
                       }
                     },
