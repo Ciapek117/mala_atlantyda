@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
@@ -8,16 +9,24 @@ class HangmanGame extends StatefulWidget {
 }
 
 class _HangmanGameState extends State<HangmanGame> {
-  final String wordToGuess = "FLUTTER";
+  Set<String> wordsToGuess = {"FLUTTER","KOPALNIA", "CZLOWIEK"};
   late List<String> wordGuessed;
-  int lives = 6;
+  int lives = 1;
   bool isGameOver = false;
   bool isWinner = false;
+  String wordToGuessByUser = "";
 
   @override
   void initState() {
     super.initState();
-    wordGuessed = List.generate(wordToGuess.length, (index) => "*");
+
+
+    var rnd = Random();
+
+    int rndIndex = rnd.nextInt(wordsToGuess.length);
+    wordToGuessByUser = wordsToGuess.elementAt(rndIndex);
+    lives = wordToGuessByUser.length;
+    wordGuessed = List.generate(wordToGuessByUser.length, (index) => "*");
   }
 
   void guessLetter(String letter) {
@@ -25,8 +34,8 @@ class _HangmanGameState extends State<HangmanGame> {
 
     setState(() {
       bool found = false;
-      for (int i = 0; i < wordToGuess.length; i++) {
-        if (wordToGuess[i] == letter) {
+      for (int i = 0; i < wordToGuessByUser.length; i++) {
+        if (wordToGuessByUser[i] == letter) {
           wordGuessed[i] = letter;
           found = true;
         }
@@ -46,8 +55,11 @@ class _HangmanGameState extends State<HangmanGame> {
 
   void resetGame() {
     setState(() {
-      wordGuessed = List.generate(wordToGuess.length, (index) => "*");
-      lives = 6;
+      var rnd = Random();
+      int rndIndex = rnd.nextInt(wordsToGuess.length);
+      wordToGuessByUser = wordsToGuess.elementAt(rndIndex);
+      wordGuessed = List.generate(wordToGuessByUser.length, (index) => "*");
+      lives = wordToGuessByUser.length;
       isGameOver = false;
       isWinner = false;
     });
@@ -112,7 +124,7 @@ class _HangmanGameState extends State<HangmanGame> {
                         : Lottie.asset('assets/lose.json', width: 200, height: 200),
                     SizedBox(height: 20),
                     Text(
-                      isWinner ? "🎉 Gratulacje! Odgadłeś hasło! 🎉" : "💀 Przegrałeś! Hasło to: $wordToGuess",
+                      isWinner ? "🎉 Gratulacje! Odgadłeś hasło! 🎉" : "💀 Przegrałeś! Hasło to: $wordToGuessByUser",
                       textAlign: TextAlign.center,
                       style: GoogleFonts.poppins(
                         textStyle: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
@@ -124,8 +136,8 @@ class _HangmanGameState extends State<HangmanGame> {
                         backgroundColor: Colors.green,
                         foregroundColor: Colors.white,
                       ),
-                      onPressed: resetGame,
-                      child: Text("Zagraj ponownie", style: TextStyle(fontSize: 18)),
+                      onPressed: isWinner ? ()=> Navigator.of(context).pop() : resetGame,
+                      child: isWinner ? Text("Powrót", style: TextStyle(fontSize: 18)) : Text("Zagraj ponownie", style: TextStyle(fontSize: 18)),
                     )
                   ],
                 ),
