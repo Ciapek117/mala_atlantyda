@@ -120,6 +120,8 @@ class _UserPageState extends State<UserPage> {
                             MaterialPageRoute(
                                 builder: (context) => HangmanGame()),
                           );
+
+                          _addLetter(index);
                         });
                       }
                       else {
