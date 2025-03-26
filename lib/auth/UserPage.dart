@@ -125,7 +125,7 @@ class _UserPageState extends State<UserPage> {
                           _addLetter(index);
                         });
                       } else if(index == 2){
-                        Future.delayed(Duration(milliseconds: 300), () {
+                        Future.delayed(Duration(milliseconds: 10), () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(

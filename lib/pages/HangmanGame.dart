@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import '../Widgets/HangmanWidgets/GameOverScreen.dart';
 import '../Widgets/HangmanWidgets/Keyboard.dart';
@@ -23,6 +24,24 @@ class _HangmanGameState extends State<HangmanGame> {
     setState(() {
       _game.resetGame();
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () => _showWelcomeDialog());
+  }
+
+  void _showWelcomeDialog() {
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.infoReverse,
+      animType: AnimType.scale,
+      title: 'Witaj w grze Wisielec!',
+      desc: 'Spróbuj odgadnąć ukryte słowo zanim skończą się Twoje życia.',
+      btnOkText: 'Zaczynamy!',
+      btnOkOnPress: () {},
+    ).show();
   }
 
   @override
