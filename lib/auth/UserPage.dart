@@ -152,6 +152,7 @@ class _UserPageState extends State<UserPage> {
                 line,
                 textAlign: TextAlign.center,
                 style: TextStyle(
+                  letterSpacing: 3,
                   fontSize: 40,
                   fontWeight: FontWeight.bold,
                   color: Color(0xFFAFCBFF),
