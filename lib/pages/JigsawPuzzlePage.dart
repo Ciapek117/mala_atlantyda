@@ -3,8 +3,6 @@ import 'dart:ui' as ui;
 import 'dart:async';
 import 'dart:math';
 
-import '../auth/UserPage.dart';
-
 void main() {
   runApp(PuzzleApp());
 }
@@ -168,9 +166,9 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
     Rect sourceRect = tilePositions[tileIndex]!;
 
     return DragTarget<int>(
-      onWillAccept: (fromIndex) => true,
-      onAccept: (fromIndex) {
-        _onTileDragged(fromIndex, index);
+      onWillAcceptWithDetails: (fromIndex) => true,
+      onAcceptWithDetails: (fromIndex) {
+        _onTileDragged(fromIndex as int, index);
       },
       builder: (context, candidateData, rejectedData) {
         return Draggable<int>(

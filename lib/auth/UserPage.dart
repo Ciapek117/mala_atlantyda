@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:mala_atlantyda/pages/HangmanGame.dart';
 import 'package:mala_atlantyda/pages/map_page.dart';

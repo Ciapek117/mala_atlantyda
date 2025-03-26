@@ -118,7 +118,7 @@ class _HangmanGameState extends State<HangmanGame> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                           side: BorderSide(
-                            color: Colors.white, // Change this to any color you want
+                            color: Colors.white,
                             width: 2, // Border thickness
                           ),
                         ),
@@ -158,7 +158,7 @@ class _HangmanGameState extends State<HangmanGame> {
                         backgroundColor: Colors.green,
                         foregroundColor: Colors.white,
                       ),
-                      onPressed: isWinner ? ()=> Navigator.of(context).pop() : resetGame,
+                      onPressed: isWinner ? () => Navigator.of(context).maybePop() : resetGame,
                       child: isWinner ? Text("Powrót", style: TextStyle(fontSize: 18)) : Text("Zagraj ponownie", style: TextStyle(fontSize: 18)),
                     )
                   ],
