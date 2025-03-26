@@ -95,17 +95,25 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
   void _showWinDialog() {
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (context) => AlertDialog(
-        title: Text("Gratulacje!"),
-        content: Text("Ułożyłeś puzzle poprawnie!"),
+        backgroundColor: Color(0xFF0c4767),
+        title: Text("Gratulacje!", style: TextStyle(color: Color(0xFFEFA00B)),),
+        content: Text("Ułożyłeś puzzle poprawnie!", style: TextStyle(color: Color(0xFFEFA00B))),
         actions: [
-          Image(image: AssetImage("images/puzle_plaza.jpg"),),
+          Container(
+            decoration: BoxDecoration(
+            border: Border.all(color: Color(0xFFA3822A), width: 3), // Obramowanie
+          ),
+            child: Image(image: AssetImage("images/puzle_plaza.jpg"),),
+          ),
+
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
               Navigator.of(context).pop();
             },
-            child: Text("OK"),
+            child: Text("OK", style: TextStyle(color: Color(0xFFEFA00B))),
           ),
         ],
       ),
