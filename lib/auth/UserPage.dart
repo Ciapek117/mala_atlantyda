@@ -6,6 +6,8 @@ import 'package:mala_atlantyda/pages/map_page.dart';
 
 import '../pages/JigsawPuzzlePage.dart';
 
+import '../pages/MemoryGame.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -28,7 +30,8 @@ class UserPage extends StatefulWidget {
 class _UserPageState extends State<UserPage> {
   final List<String> questions = List.generate(14, (index) => "Zadanie ${index + 1}")
     ..[0] = "Zejście Plaża (Puzzle)"
-    ..[1] = "Dworzec (Wisielec)";
+    ..[1] = "Dworzec (Wisielec)"
+    ..[2] = "Lokalna organizacja turystyczna (Memory)";
   final String targetWord = "SZTORMOWY SZLAK";
   List<bool> isQuestionClicked = List.generate(14, (index) => false);
   int currentLetterIndex = 0;
@@ -119,6 +122,16 @@ class _UserPageState extends State<UserPage> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => HangmanGame()),
+                          );
+
+                          _addLetter(index);
+                        });
+                      } else if(index == 2){
+                        Future.delayed(Duration(milliseconds: 300), () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MemoryGameScreen()),
                           );
 
                           _addLetter(index);
