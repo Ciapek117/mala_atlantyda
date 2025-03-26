@@ -99,6 +99,7 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
         title: Text("Gratulacje!"),
         content: Text("Ułożyłeś puzzle poprawnie!"),
         actions: [
+          Image(image: AssetImage("images/puzle_plaza.jpg"),),
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
