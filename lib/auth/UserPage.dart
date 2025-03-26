@@ -1,4 +1,4 @@
-import 'dart:math';
+
 
 import 'package:flutter/material.dart';
 import 'package:mala_atlantyda/pages/HangmanGame.dart';
@@ -105,7 +105,7 @@ class _UserPageState extends State<UserPage> {
                     onTap: () {
                       Navigator.pop(context); // Zamknij drawer przed nawigacją
                       if (index == 0) {
-                        Future.delayed(Duration(milliseconds: 300), () {
+                        Future.delayed(Duration(milliseconds: 10), () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => PuzzleApp()),
@@ -114,7 +114,7 @@ class _UserPageState extends State<UserPage> {
 
                         });
                       } else if(index == 1){
-                        Future.delayed(Duration(milliseconds: 300), () {
+                        Future.delayed(Duration(milliseconds: 10), () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
