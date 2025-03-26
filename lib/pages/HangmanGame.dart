@@ -68,37 +68,59 @@ class _HangmanGameState extends State<HangmanGame> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blueGrey[900],
+      backgroundColor: Color(0xFF0c4767),
       body: Stack(
         children: [
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  "Życia: $lives",
-                  style: GoogleFonts.poppins(
-                    textStyle: TextStyle(fontSize: 24, color: Colors.white),
+                RichText(
+                  text: TextSpan(
+                    style: GoogleFonts.poppins(
+                      textStyle: TextStyle(
+                        fontSize: 30,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 2,
+                      ),
+                    ),
+                    children: [
+                      TextSpan(text: "Życia: $lives "),
+                      WidgetSpan(
+                        alignment: PlaceholderAlignment.middle,
+                        child: Image.asset(
+                          'images/mcHeart.png',
+                          width: 30,
+                          height: 30,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
+
                 SizedBox(height: 20),
                 Text(
                   wordGuessed.join(" "),
                   style: GoogleFonts.poppins(
-                    textStyle: TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: Colors.amberAccent),
+                    textStyle: TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: Color(0xFfefa00b)),
                   ),
                 ),
-                SizedBox(height: 30),
+                SizedBox(height: 40),
                 Wrap(
-                  spacing: 8.0,
-                  runSpacing: 8.0,
-                  children: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map((letter) {
+                  spacing: 12.0,
+                  runSpacing: 10.0,
+                  children: 'AĄBCĆDEĘFGHIJKLŁMNŃOÓPQRSŚTUVWXYZŻŹ'.split('').map((letter) {
                     return ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.tealAccent[700],
+                        backgroundColor: Color(0xFF0075c4),
                         foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
+                          side: BorderSide(
+                            color: Colors.white, // Change this to any color you want
+                            width: 2, // Border thickness
+                          ),
                         ),
                       ),
                       onPressed: (lives > 0 && !wordGuessed.contains(letter)) ? () => guessLetter(letter) : null,
