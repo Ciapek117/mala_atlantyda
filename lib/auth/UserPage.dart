@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mala_atlantyda/pages/HangmanGame.dart';
+import 'package:mala_atlantyda/pages/MatchingGame.dart';
 import 'package:mala_atlantyda/pages/map_page.dart';
 
 import '../pages/JigsawPuzzlePage.dart';
-
+import 'package:mala_atlantyda/pages/HangmanGame.dart';
+import '../pages/MemoryGame.dart';
 import '../pages/MemoryGame.dart';
 
 void main() {
@@ -29,7 +30,8 @@ class _UserPageState extends State<UserPage> {
   final List<String> questions = List.generate(14, (index) => "Zadanie ${index + 1}")
     ..[0] = "Zejście Plaża (Puzzle)"
     ..[1] = "Dworzec (Wisielec)"
-    ..[2] = "Lokalna organizacja turystyczna (Memory)";
+    ..[2] = "Lokalna organizacja turystyczna (Memory)"
+    ..[3] = "Ratusz (Dopasuj miasta do km)";
   final String targetWord = "SZTORMOWY SZLAK";
   List<bool> isQuestionClicked = List.generate(14, (index) => false);
   int currentLetterIndex = 0;
@@ -130,6 +132,16 @@ class _UserPageState extends State<UserPage> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => MemoryGameScreen()),
+                          );
+
+                          _addLetter(index);
+                        });
+                      } else if(index == 3){
+                        Future.delayed(Duration(milliseconds: 10), () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MatchingGamePage()),
                           );
 
                           _addLetter(index);
