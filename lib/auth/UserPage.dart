@@ -6,6 +6,7 @@ import '../pages/JigsawPuzzlePage.dart';
 import 'package:mala_atlantyda/pages/HangmanGame.dart';
 import '../pages/MemoryGame.dart';
 import '../pages/MemoryGame.dart';
+import '../pages/PongGame.dart';
 
 void main() {
   runApp(MyApp());
@@ -141,7 +142,7 @@ class _UserPageState extends State<UserPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => MatchingGamePage()),
+                                builder: (context) => PongGame()),
                           );
 
                           _addLetter(index);
