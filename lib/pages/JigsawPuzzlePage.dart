@@ -166,9 +166,9 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
     Rect sourceRect = tilePositions[tileIndex]!;
 
     return DragTarget<int>(
-      onWillAcceptWithDetails: (fromIndex) => true,
-      onAcceptWithDetails: (fromIndex) {
-        _onTileDragged(fromIndex as int, index);
+      onWillAccept: (fromIndex) => true,
+      onAccept: (fromIndex) {
+        _onTileDragged(fromIndex, index);
       },
       builder: (context, candidateData, rejectedData) {
         return Draggable<int>(
