@@ -70,10 +70,10 @@ class _MatchingGamePageState extends State<MatchingGamePage> {
       backgroundColor: Color(0xFF0c4767),
       body: Column(
         children: [
-          SizedBox(height: 200),
+          SizedBox(height: 100),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text("Dopasuj miasta do odległości", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            child: Text("Dopasuj miasta do odległości", style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold, color: Color(0xFFEFA00B))),
           ),
           Expanded(
             child: Row(
