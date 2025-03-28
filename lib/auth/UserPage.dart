@@ -28,14 +28,14 @@ class UserPage extends StatefulWidget {
 }
 
 class _UserPageState extends State<UserPage> {
-  final List<String> questions = List.generate(14, (index) => "Zadanie ${index + 1}")
+  final List<String> questions = List.generate(12, (index) => "Zadanie ${index + 1}")
     ..[0] = "Zejście Plaża (Puzzle)"
     ..[1] = "Dworzec (Wisielec)"
     ..[2] = "Lokalna organizacja turystyczna (Memory)"
     ..[3] = "Ratusz (Dopasuj miasta do km)"
     ..[4] = "Osir (Pong)";
   final String targetWord = "SZTORMOWY SZLAK";
-  List<bool> isQuestionClicked = List.generate(14, (index) => false);
+  List<bool> isQuestionClicked = List.generate(12, (index) => false);
   int currentLetterIndex = 0;
 
   void _addLetter(int index) {
