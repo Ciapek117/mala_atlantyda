@@ -32,7 +32,8 @@ class _UserPageState extends State<UserPage> {
     ..[0] = "Zejście Plaża (Puzzle)"
     ..[1] = "Dworzec (Wisielec)"
     ..[2] = "Lokalna organizacja turystyczna (Memory)"
-    ..[3] = "Ratusz (Dopasuj miasta do km)";
+    ..[3] = "Ratusz (Dopasuj miasta do km)"
+    ..[4] = "Osir (Pong)";
   final String targetWord = "SZTORMOWY SZLAK";
   List<bool> isQuestionClicked = List.generate(14, (index) => false);
   int currentLetterIndex = 0;
@@ -138,6 +139,16 @@ class _UserPageState extends State<UserPage> {
                           _addLetter(index);
                         });
                       } else if(index == 3){
+                        Future.delayed(Duration(milliseconds: 10), () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MatchingGamePage()),
+                          );
+
+                          _addLetter(index);
+                        });
+                      } else if(index == 4){
                         Future.delayed(Duration(milliseconds: 10), () {
                           Navigator.push(
                             context,
