@@ -24,6 +24,7 @@ class _MatchingGamePageState extends State<MatchingGamePage> {
 
   Map<String, int?> userMatches = {};
   List<int> shuffledDistances = [];
+  List<String> matchedCities = [];
 
   @override
   void initState() {
@@ -39,9 +40,14 @@ class _MatchingGamePageState extends State<MatchingGamePage> {
   }
 
   void checkWinCondition() {
-    // Sprawdzenie, czy wszystkie miasta zostały poprawnie dopasowane
+    setState(() {
+      matchedCities = userMatches.entries
+          .where((entry) => cityDistances[entry.key] == entry.value)
+          .map((entry) => entry.key)
+          .toList();
+    });
+
     if (userMatches.entries.every((entry) => cityDistances[entry.key] == entry.value)) {
-      // Wywołanie alertu po wygranej
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -52,7 +58,6 @@ class _MatchingGamePageState extends State<MatchingGamePage> {
               TextButton(
                 child: Text("OK"),
                 onPressed: () {
-                  // Zamknięcie dialogu po kliknięciu OK
                   Navigator.of(context).pop();
                   Navigator.of(context).pop();
                 },
@@ -68,90 +73,132 @@ class _MatchingGamePageState extends State<MatchingGamePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFF0c4767),
-      body: Column(
-        children: [
-          SizedBox(height: 100),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text("Dopasuj miasta do odległości", style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold, color: Color(0xFFEFA00B))),
-          ),
-          Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                // Miasta do przenoszenia
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: userMatches.keys.where((city) => userMatches[city] == null || userMatches[city] != cityDistances[city]).map((city) {
-                    return Draggable<String>(
-                      data: city,
-                      feedback: Material(
-                        child: Container(
-                          padding: EdgeInsets.all(8),
-                          color: Color(0xFF0075C4),
-                          child: Text(city, style: TextStyle(color: Colors.white)),
-                        ),
-                      ),
-                      childWhenDragging: Container(),
-                      child: Container(
-                        margin: EdgeInsets.symmetric(vertical: 8),
-                        padding: EdgeInsets.all(8),
-                        color: Colors.blue,
-                        child: Text(city, style: TextStyle(color: Colors.white)),
-                      ),
-                    );
-                  }).toList(),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(height: 100),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "Dopasuj miasta do odległości",
+                  style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold, color: Color(0xFFEFA00B)),
+                  textAlign: TextAlign.center,
                 ),
-
-                // Miejsca na odległości
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: shuffledDistances.map((distance) {
-                    return DragTarget<String>(
-                      onWillAccept: (city) => true, // Zawsze akceptuj miasto
-                      onAccept: (city) {
-                        setState(() {
-                          // Sprawdzamy, czy miasto jest już przypisane
-                          String? previousCity = userMatches.entries
-                              .firstWhere((entry) => entry.value == distance, orElse: () => MapEntry("", null))
-                              .key;
-
-                          // Jeśli było przypisane inne miasto, usuwamy je
-                          if (previousCity != null && previousCity.isNotEmpty) {
-                            userMatches[previousCity] = null; // Usuwamy poprzednie miasto
-                          }
-
-                          // Przypisujemy nowe miasto
-                          userMatches[city] = distance;
-                          checkWinCondition();
-                        });
-                      },
-                      builder: (context, candidateData, rejectedData) {
-                        String? matchedCity = userMatches.entries
-                            .firstWhere((entry) => entry.value == distance, orElse: () => MapEntry("", null))
-                            .key;
-
-                        bool isCorrect = matchedCity.isNotEmpty && userMatches[matchedCity] == cityDistances[matchedCity];
-                        Color boxColor = isCorrect ? Colors.green : (matchedCity.isNotEmpty ? Color(0xFFEA5B60) : Color(0xFFAFCBFF));
-
-                        return Container(
-                          margin: EdgeInsets.symmetric(vertical: 8),
-                          padding: EdgeInsets.all(8),
-                          color: boxColor,
-                          child: Text(
-                            matchedCity.isNotEmpty ? "$matchedCity - $distance km" : "$distance km",
-                            style: TextStyle(color: Color(0xFF273B09)),
+              ),
+              SizedBox(height: 20),
+              Expanded(
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    return Column(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(7), // Dodanie paddingu 5
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Color(0xFFB2BD7E), width: 2), // Dodanie obramowania
+                            borderRadius: BorderRadius.circular(10), // Zaokrąglenie rogów
                           ),
-                        );
-                      },
+                          child: Wrap(
+                            spacing: 20,
+                            runSpacing: 10,
+                            children: userMatches.keys.map((city) {
+                              bool isMatched = matchedCities.contains(city);
+                              return Container(
+                                width: 170,
+                                height: 50,
+                                alignment: Alignment.center,
+                                child: isMatched
+                                    ? Container()
+                                    : Draggable<String>(
+                                  data: city,
+                                  feedback: Material(
+                                    child: Container(
+                                      width: 170,
+                                      height: 50,
+                                      color: Color(0xFF0075C4),
+                                      alignment: Alignment.center,
+                                      child: Text(city, style: TextStyle(color: Colors.white)),
+                                    ),
+                                  ),
+                                  childWhenDragging: Container(
+                                    width: 170,
+                                    height: 50,
+                                    alignment: Alignment.center,
+                                    color: Colors.blue.withOpacity(0.5),
+                                    child: Text(city, style: TextStyle(color: Colors.white)),
+                                  ),
+                                  child: Container(
+                                    width: 170,
+                                    height: 50,
+                                    alignment: Alignment.center,
+                                    color: Colors.blue,
+                                    child: Text(city, style: TextStyle(color: Colors.white)),
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ),
+
+                        SizedBox(height: 50),
+                        Container(
+                          padding: EdgeInsets.all(7), // Dodanie paddingu 5
+                          decoration: BoxDecoration(// Dodanie czarnego tła
+                            border: Border.all(color: Color(0xFFB2BD7E), width: 2), // Dodanie obramowania
+                            borderRadius: BorderRadius.circular(10), // Zaokrąglenie rogów
+                          ),
+                          child: Wrap(
+                            spacing: 20,
+                            runSpacing: 10,
+                            children: shuffledDistances.map((distance) {
+                              return DragTarget<String>(
+                                onWillAccept: (city) => true,
+                                onAccept: (city) {
+                                  setState(() {
+                                    String? previousCity = userMatches.entries
+                                        .firstWhere((entry) => entry.value == distance, orElse: () => MapEntry("", null))
+                                        .key;
+                                    if (previousCity != null && previousCity.isNotEmpty) {
+                                      userMatches[previousCity] = null;
+                                    }
+                                    userMatches[city] = distance;
+                                    checkWinCondition();
+                                  });
+                                },
+                                builder: (context, candidateData, rejectedData) {
+                                  String? matchedCity = userMatches.entries
+                                      .firstWhere((entry) => entry.value == distance, orElse: () => MapEntry("", null))
+                                      .key;
+                                  bool isCorrect = matchedCity.isNotEmpty && userMatches[matchedCity] == cityDistances[matchedCity];
+                                  Color boxColor = isCorrect ? Colors.green : (matchedCity.isNotEmpty ? Color(0xFFEA5B60) : Color(0xFFAFCBFF));
+                                  return Container(
+                                    width: 170,
+                                    height: 50,
+                                    alignment: Alignment.center,
+                                    color: boxColor,
+                                    child: Text(
+                                      matchedCity.isNotEmpty ? "$matchedCity - $distance km" : "$distance km",
+                                      style: TextStyle(color: Color(0xFF273B09)),
+                                    ),
+                                  );
+                                },
+                              );
+                            }).toList(),
+                          ),
+                        ),
+
+
+                      ],
                     );
-                  }).toList(),
+                  },
                 ),
-              ],
-            ),
+              ),
+              SizedBox(height: 50),
+            ],
           ),
-          SizedBox(height: 200),
-        ],
+        ),
       ),
     );
   }
