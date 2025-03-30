@@ -21,14 +21,24 @@ class CustomTextField extends StatelessWidget {
       obscureText: isPassword,
       controller: controller,
       decoration: InputDecoration(
+          filled: true,
+          fillColor: Colors.white,
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(30),
+            borderSide: BorderSide(color: Colors.white, width: 2), // Białe obramowanie
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(30),
+            borderSide: BorderSide(color: Colors.white, width: 2), // Białe obramowanie przy fokusie
+          ),
           hintText: hint,
           hintStyle: TextStyle(color: color),
           contentPadding:
           const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
           label: Text(label, style: TextStyle(color: color)),
           border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(6),
-              borderSide: const BorderSide(color: Colors.yellow, width: 4))),
+              borderRadius: BorderRadius.circular(30),
+              borderSide: const BorderSide(color: Colors.white, width: 4))),
     );
   }
 }

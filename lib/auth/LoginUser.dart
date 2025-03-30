@@ -20,7 +20,8 @@ class _LoginScreenState extends State<LoginScreen> {
         password: password, // Hasło wprowadzone przez użytkownika
       );
       print("✅ Zalogowano: ${userCredential.user!.email}");
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => UserPage()));
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => UserPage()));
     } catch (e) {
       print("❌ Błąd logowania: $e");
     }
@@ -30,51 +31,71 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: const Color(0xFF0c4767),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 25),
-        child: Column(
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("images/tlo.png"),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Stack(
           children: [
-            Image.asset('images/logoM_A.png', fit: BoxFit.cover, height: 300,),
-            Text(
-              "Wpisz hasło grupy",
-              style: GoogleFonts.kanit(
-                textStyle: const TextStyle(
-                  color: Color(0xFF0c4767),
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
+            Positioned.fill(
+              child: Transform.scale(
+                scale: 1.8,
+                child: Image.asset("images/trojzab.png", fit: BoxFit.cover),
+              ),
+            ),
+            Positioned.fill(
+              child: Transform.scale(
+                scale: 1.0,
+                child: Image.asset(
+                    "images/mala_atlantyda.png", fit: BoxFit.cover),
+              ),
+            ),
+            Center(
+              child: Padding(
+                padding: EdgeInsets.only(top: 60),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      width: 230,
+                      child: CustomTextField(
+                          hint: "Enter Password",
+                          label: "Password",
+                          //controller: _password,
+                          isPassword: true,
+                          color: Color(0xFFADE8F4)
+                      ),
+                    ),
+                    SizedBox(height: 5),
+                    // Mniejszy odstęp między TextField a przyciskiem
+                    SizedBox(
+                      width: 230,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(
+                              0xff00bbc2), // Jasny niebieski kolor tła
+                        ),
+                        child: Text(
+                          "Zaloguj się",
+                          style: TextStyle(
+                              fontStyle: FontStyle.italic,
+                              color: Colors.white,
+                              fontSize: 20
+                          ),
+                        ),
+                          onPressed: () => login("6TVB9L"),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
-            const SizedBox(height: 20),
-            CustomTextField(
-              hint: "Enter Password",
-              label: "Password",
-              //controller: _password,
-              isPassword: true,
-              color: Color(0xFFADE8F4)
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              child: (Text("Zaloguj się")),
-              onPressed: () => login("6TVB9L"),
-            ),
-            const SizedBox(height: 5),
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              const SizedBox(height: 30),
-              /*
-              const Text("Don't have an account yet? ", style: TextStyle(color: Colors.white),),
-
-              InkWell(
-                //onTap: () => goToSignup(context),
-                child:
-                const Text("Signup", style: TextStyle(color: Color(0xFFD2AF43))),
-              )
-              */
-            ]),
-            const Spacer()
           ],
         ),
       ),
     );
-  }}
+  }
+}
