@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mala_atlantyda/Widgets/animations/fadeRoute.dart';
-import 'package:mala_atlantyda/Widgets/animations/mixRoute.dart';
-
 import '../auth/UserPage.dart';
-import 'animations/slideRoute.dart';
 
 class AnimatedScreen extends StatefulWidget {
   @override
@@ -14,7 +11,7 @@ class _AnimatedScreenState extends State<AnimatedScreen> {
   bool _showTrident = false;
   bool _showUI = false;
   bool _isLoggedIn = false;
-  bool _tridentGoesUp = false; // Nowa flaga dla trójzęba
+  bool _tridentGoesUp = false;
 
   @override
   void initState() {
@@ -33,32 +30,17 @@ class _AnimatedScreenState extends State<AnimatedScreen> {
     });
   }
 
-  PageRouteBuilder fadeRoute(Widget page) {
-    return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => page,
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        return FadeTransition(
-          opacity: animation,
-          child: child,
-        );
-      },
-      transitionDuration: Duration(milliseconds: 1000), // Czas trwania animacji
-    );
-  }
-
   void _login() {
     setState(() {
-      _isLoggedIn = true; // Ukrywa UI
+      _isLoggedIn = true;
     });
 
-    // Po 0.5 sekundy trójząb zaczyna lecieć do góry
     Future.delayed(Duration(milliseconds: 500), () {
       setState(() {
         _tridentGoesUp = true;
       });
     });
 
-    // Po 1.5 sekundy (po zakończeniu animacji) przejście do UserPage
     Future.delayed(Duration(milliseconds: 1500), () {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
@@ -68,9 +50,10 @@ class _AnimatedScreenState extends State<AnimatedScreen> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Container(
@@ -82,13 +65,12 @@ class _AnimatedScreenState extends State<AnimatedScreen> {
         ),
         child: Stack(
           children: [
-            // Trójząb - animacja z dołu na środek, potem do góry po zalogowaniu
             AnimatedPositioned(
               duration: Duration(seconds: 1),
               curve: Curves.easeOut,
               bottom: _tridentGoesUp
-                  ? MediaQuery.of(context).size.height // Przesuwa trójząb do góry
-                  : (_showTrident ? MediaQuery.of(context).size.height / 2 - 200 : -200),
+                  ? screenHeight
+                  : (_showTrident ? screenHeight / 2 - 200 : -600),
               left: 0,
               right: 0,
               child: Transform.scale(
@@ -97,7 +79,6 @@ class _AnimatedScreenState extends State<AnimatedScreen> {
               ),
             ),
 
-            // Mała Atlantyda - zawsze widoczna
             Positioned.fill(
               child: Transform.scale(
                 scale: 1.0,
@@ -105,10 +86,9 @@ class _AnimatedScreenState extends State<AnimatedScreen> {
               ),
             ),
 
-            // UI - TextField i przycisk, które szybko znikają po zalogowaniu
             Center(
               child: AnimatedOpacity(
-                duration: Duration(milliseconds: 500), // UI szybciej znika
+                duration: Duration(milliseconds: 500),
                 opacity: _isLoggedIn ? 0.0 : (_showUI ? 1.0 : 0.0),
                 child: Padding(
                   padding: EdgeInsets.only(top: 60),
@@ -141,7 +121,7 @@ class _AnimatedScreenState extends State<AnimatedScreen> {
                               fontSize: 20,
                             ),
                           ),
-                          onPressed: _login, // Uruchamia animację po kliknięciu
+                          onPressed: _login,
                         ),
                       ),
                     ],
