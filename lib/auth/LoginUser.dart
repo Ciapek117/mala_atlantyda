@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mala_atlantyda/Widgets/AnimatedScreen.dart';
 import './UserPage.dart';
 
 import '../Widgets/CustomTextField.dart';
@@ -28,7 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
 
-  Widget build(BuildContext context) {
+ Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Container(

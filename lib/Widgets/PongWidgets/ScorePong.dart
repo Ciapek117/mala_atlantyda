@@ -7,7 +7,7 @@ class ScorePong extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return           Positioned(
+    return Positioned(
         top: 40,
         left: 0,
         right: 0,
@@ -15,7 +15,7 @@ class ScorePong extends StatelessWidget {
             "Punkty: $score",
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: Colors.white,
+              color: Color(0xFFefa00b),
               fontSize: 24,
               fontWeight: FontWeight.bold,
             )));

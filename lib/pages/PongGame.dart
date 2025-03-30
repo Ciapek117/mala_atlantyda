@@ -54,7 +54,7 @@ class _PongGameState extends State<PongGame> {
     return MaterialApp(
       navigatorKey: navigatorKey,
       home: Scaffold(
-        backgroundColor: Colors.grey[900],
+        backgroundColor: Color(0xFF0c4767),
         body: PongBoard(gameLogic: gameLogic),
       ),
     );

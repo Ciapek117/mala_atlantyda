@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:mala_atlantyda/Widgets/AnimatedScreen.dart';
 
 import './auth/LoginUser.dart';
 
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LoginScreen(), //LoginScreen()
+      home: AnimatedScreen(), //LoginScreen()
     );
   }
 }
