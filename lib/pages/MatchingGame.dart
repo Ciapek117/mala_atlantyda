@@ -100,22 +100,21 @@ class _MatchingGamePageState extends State<MatchingGamePage> {
                     return Column(
                       children: [
                         Container(
-                          width: MediaQuery.of(context).size.width , // Pobranie szerokości ekranu użytkownika
-                          height: MediaQuery.of(context).size.height * 0.21, // Pobranie wysokości ekranu użytkownika
-                          padding: EdgeInsets.all(7), // Dodanie paddingu 5
-
+                          width: MediaQuery.of(context).size.width * 0.8, // Zmniejszona szerokość
+                          height: MediaQuery.of(context).size.height * 0.23, // Zmniejszona wysokość
+                          padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.015), // Mniejszy padding
                           decoration: BoxDecoration(
-                            border: Border.all(color: Color(0xFFAFCBFF), width: 2), // Dodanie obramowania
-                            borderRadius: BorderRadius.circular(10), // Zaokrąglenie rogów
+                            border: Border.all(color: Color(0xFFAFCBFF), width: MediaQuery.of(context).size.width * 0.004), // Cieńsze obramowanie
+                            borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width * 0.025), // Mniejsze zaokrąglenie rogów
                           ),
                           child: Wrap(
-                            spacing: 20,
-                            runSpacing: 10,
+                            spacing: MediaQuery.of(context).size.width * 0.06,
+                            runSpacing: MediaQuery.of(context).size.height * 0.015,
                             children: userMatches.keys.map((city) {
                               bool isMatched = matchedCities.contains(city);
                               return Container(
-                                width: 170,
-                                height: 50,
+                                width: MediaQuery.of(context).size.width * 0.35,
+                                height: MediaQuery.of(context).size.height * 0.06,
                                 alignment: Alignment.center,
                                 child: isMatched
                                     ? Container()
@@ -123,26 +122,26 @@ class _MatchingGamePageState extends State<MatchingGamePage> {
                                   data: city,
                                   feedback: Material(
                                     child: Container(
-                                      width: 170,
-                                      height: 50,
+                                      width: MediaQuery.of(context).size.width * 0.5,
+                                      height: MediaQuery.of(context).size.height * 0.06,
                                       color: Color(0xFF0075C4),
                                       alignment: Alignment.center,
-                                      child: Text(city, style: TextStyle(color: Colors.white)),
+                                      child: Text(city, style: TextStyle(color: Colors.white, fontSize: MediaQuery.of(context).size.width * 0.035)),
                                     ),
                                   ),
                                   childWhenDragging: Container(
-                                    width: 170,
-                                    height: 50,
+                                    width: MediaQuery.of(context).size.width * 0.35,
+                                    height: MediaQuery.of(context).size.height * 0.06,
                                     alignment: Alignment.center,
                                     color: Colors.blue.withOpacity(0.5),
-                                    child: Text(city, style: TextStyle(color: Colors.white)),
+                                    child: Text(city, style: TextStyle(color: Colors.white, fontSize: MediaQuery.of(context).size.width * 0.035)),
                                   ),
                                   child: Container(
-                                    width: MediaQuery.of(context).size.width ,
-                                    height: 50,
+                                    width: MediaQuery.of(context).size.width * 0.35,
+                                    height: MediaQuery.of(context).size.height * 0.06,
                                     alignment: Alignment.center,
                                     color: Color(0xFF0075C4),
-                                    child: Text(city, style: TextStyle(color: Colors.white)),
+                                    child: Text(city, style: TextStyle(color: Colors.white, fontSize: MediaQuery.of(context).size.width * 0.035)),
                                   ),
                                 ),
                               );
@@ -184,7 +183,7 @@ class _MatchingGamePageState extends State<MatchingGamePage> {
                                   bool isCorrect = matchedCity.isNotEmpty && userMatches[matchedCity] == cityDistances[matchedCity];
                                   Color boxColor = isCorrect ? Colors.green : (matchedCity.isNotEmpty ? Color(0xFFEA5B60) : Color(0xFFAFCBFF));
                                   return Container(
-                                    width: MediaQuery.of(context).size.width * 0.412,
+                                    width: MediaQuery.of(context).size.width * 0.4,
                                     height: 50,
                                     alignment: Alignment.center,
                                     color: boxColor,
