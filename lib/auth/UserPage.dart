@@ -34,6 +34,7 @@ class UserPage extends StatefulWidget {
 
 class _UserPageState extends State<UserPage> {
   static const String targetWord = "SZTORMOWY SZLAK";
+  late List<bool> isQuestionClicked;
   final List<String> questions = [
     "Zejście Plaża (Puzzle)",
     "Dworzec (Wisielec)",
@@ -56,7 +57,11 @@ class _UserPageState extends State<UserPage> {
     ParkLinowyPage(),
   ];
 
-  List<bool> isQuestionClicked = List.generate(8, (index) => false);
+  @override
+  void initState() {
+    super.initState();
+    isQuestionClicked = List.generate(questions.length, (index) => false);
+  }
   int currentLetterIndex = 0;
 
   void _addLetter(int index) {
