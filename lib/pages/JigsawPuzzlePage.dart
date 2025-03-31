@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 import 'dart:async';
@@ -33,6 +34,19 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
     super.initState();
     _loadImage("images/puzle_plaza.jpg");
     _initializeTiles();
+    Future.delayed(Duration.zero, () => _showWelcomeDialog());
+  }
+
+  void _showWelcomeDialog() {
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.infoReverse,
+      animType: AnimType.scale,
+      title: 'Witaj w grze Puzzle',
+      desc: 'Ułóż puzzle plaży i zdobądź literkę do hasła!',
+      btnOkText: 'Zaczynamy!',
+      btnOkOnPress: () {},
+    ).show();
   }
 
   Future<void> _loadImage(String assetPath) async {
