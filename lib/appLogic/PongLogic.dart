@@ -8,7 +8,7 @@ enum Direction { UP, DOWN, LEFT, RIGHT }
 
 class PongLogic {
   double ballX = 0;
-  double ballY = 0;
+  double ballY = 0.5;
   var ballYDirection = Direction.DOWN;
   var ballXDirection = Direction.LEFT;
 
@@ -67,7 +67,7 @@ class PongLogic {
   void resetGame() {
     gameHasStarted = false;
     ballX = 0;
-    ballY = 0;
+    ballY = 0.5;
     paddleX = -0.2;
     score = 0;
     gameOverDialogShown = false;

@@ -16,7 +16,7 @@ class _PongGameState extends State<PongGame> {
   void _showGameInfoDialog() {
       AwesomeDialog(
         context: context,
-        dialogType: DialogType.info,
+        dialogType: DialogType.infoReverse,
         animType: AnimType.scale,
         title: "Witaj w Pong!",
         desc: "Odbij piłkę jak najwięcej razy. Jeśli zdobędziesz 15 punktów – wygrywasz!",

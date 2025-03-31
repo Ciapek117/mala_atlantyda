@@ -18,7 +18,7 @@ class PongBoard extends StatelessWidget {
           Center(
             child: Text(
               "${gameLogic.countdown}",
-              style: TextStyle(fontSize: 50, color: Colors.white, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 50, color: Color(0xFFefa00b), fontWeight: FontWeight.bold),
             ),
           ),
 
