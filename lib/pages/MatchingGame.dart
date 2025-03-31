@@ -84,8 +84,8 @@ class _MatchingGamePageState extends State<MatchingGamePage> {
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
                   "Dopasuj miasta do odległości",
-                  style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold, color: Color(0xFFEFA00B)),
-                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 45, fontWeight: FontWeight.bold, color: Color(0xFFEFA00B)),
+                  textAlign: TextAlign.left,
                 ),
               ),
               SizedBox(height: 20),
@@ -100,7 +100,7 @@ class _MatchingGamePageState extends State<MatchingGamePage> {
                           padding: EdgeInsets.all(7), // Dodanie paddingu 5
 
                           decoration: BoxDecoration(
-                            border: Border.all(color: Color(0xFFB2BD7E), width: 2), // Dodanie obramowania
+                            border: Border.all(color: Color(0xFFAFCBFF), width: 2), // Dodanie obramowania
                             borderRadius: BorderRadius.circular(10), // Zaokrąglenie rogów
                           ),
                           child: Wrap(
@@ -136,7 +136,7 @@ class _MatchingGamePageState extends State<MatchingGamePage> {
                                     width: 170,
                                     height: 50,
                                     alignment: Alignment.center,
-                                    color: Colors.blue,
+                                    color: Color(0xFF0075C4),
                                     child: Text(city, style: TextStyle(color: Colors.white)),
                                   ),
                                 ),
@@ -151,7 +151,7 @@ class _MatchingGamePageState extends State<MatchingGamePage> {
                           height: 190,
                           padding: EdgeInsets.all(7), // Dodanie paddingu 5
                           decoration: BoxDecoration(// Dodanie czarnego tła
-                            border: Border.all(color: Color(0xFFB2BD7E), width: 2), // Dodanie obramowania
+                            border: Border.all(color: Color(0xFFAFCBFF), width: 2), // Dodanie obramowania
                             borderRadius: BorderRadius.circular(10), // Zaokrąglenie rogów
                           ),
                           child: Wrap(
