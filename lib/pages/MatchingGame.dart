@@ -67,9 +67,12 @@ class _MatchingGamePageState extends State<MatchingGamePage> {
         dialogType: DialogType.success,
         animType: AnimType.scale,
         title: 'Gratulacje!',
-        desc: 'Udało się wszytsko dopasować!',
+        desc: 'Udało się wszystko dopasować!',
         btnOkText: 'Powrót',
-        btnOkOnPress: () {},
+        btnOkOnPress: () {
+          Navigator.pop(context);
+          Navigator.maybePop(context);
+        },
       ).show();
     }
   }

@@ -8,7 +8,7 @@ enum Direction { UP, DOWN, LEFT, RIGHT }
 
 class PongLogic {
   double ballX = 0;
-  double ballY = 0.5;
+  double ballY = -0.5;
   var ballYDirection = Direction.DOWN;
   var ballXDirection = Direction.LEFT;
 
@@ -67,13 +67,12 @@ class PongLogic {
   void resetGame() {
     gameHasStarted = false;
     ballX = 0;
-    ballY = 0.5;
+    ballY = -0.5;
     paddleX = -0.2;
     score = 0;
     gameOverDialogShown = false;
     countdown = 3;  // Resetujemy odliczanie!
     onGameStateChanged();
-    startCountdown();  // Rozpoczynamy nowe odliczanie po resecie!
   }
 
   void updateDirection() {
@@ -97,14 +96,14 @@ class PongLogic {
   void moveBall() {
     if (!gameHasStarted) return;
     if (ballYDirection == Direction.DOWN) {
-      ballY += 0.001;
+      ballY += 0.003;
     } else if (ballYDirection == Direction.UP) {
-      ballY -= 0.001;
+      ballY -= 0.003;
     }
     if (ballXDirection == Direction.LEFT) {
-      ballX -= 0.001;
+      ballX -= 0.003;
     } else if (ballXDirection == Direction.RIGHT) {
-      ballX += 0.001;
+      ballX += 0.003;
     }
   }
 

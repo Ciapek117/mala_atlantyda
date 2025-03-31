@@ -19,7 +19,7 @@ class _PongGameState extends State<PongGame> {
         dialogType: DialogType.infoReverse,
         animType: AnimType.scale,
         title: "Witaj w Pong!",
-        desc: "Odbij piłkę jak najwięcej razy. Jeśli zdobędziesz 15 punktów – wygrywasz!",
+        desc: "Odbij piłkę jak najwięcej razy. Jeśli zdobędziesz ${gameLogic.winScore} punktów – wygrywasz!",
         btnOkText: "OK",
         btnOkOnPress: () {
           gameLogic.startCountdown();
@@ -33,7 +33,7 @@ class _PongGameState extends State<PongGame> {
       dialogType: DialogType.success,
       animType: AnimType.bottomSlide,
       title: "Gratulacje!",
-      desc: "Zdobyłeś 15 punktów!",
+      desc: "Zdobyłeś ${gameLogic.winScore} punktów!",
       btnOkText: "OK",
       btnOkOnPress: () {
         Navigator.pop(context);
@@ -52,6 +52,7 @@ class _PongGameState extends State<PongGame> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       navigatorKey: navigatorKey,
       home: Scaffold(
         backgroundColor: Color(0xFF0c4767),
