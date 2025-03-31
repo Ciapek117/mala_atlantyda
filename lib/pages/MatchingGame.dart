@@ -100,8 +100,8 @@ class _MatchingGamePageState extends State<MatchingGamePage> {
                     return Column(
                       children: [
                         Container(
-                          width: 600,
-                          height: 190,
+                          width: MediaQuery.of(context).size.width , // Pobranie szerokości ekranu użytkownika
+                          height: MediaQuery.of(context).size.height * 0.21, // Pobranie wysokości ekranu użytkownika
                           padding: EdgeInsets.all(7), // Dodanie paddingu 5
 
                           decoration: BoxDecoration(
@@ -138,7 +138,7 @@ class _MatchingGamePageState extends State<MatchingGamePage> {
                                     child: Text(city, style: TextStyle(color: Colors.white)),
                                   ),
                                   child: Container(
-                                    width: 170,
+                                    width: MediaQuery.of(context).size.width ,
                                     height: 50,
                                     alignment: Alignment.center,
                                     color: Color(0xFF0075C4),
@@ -152,8 +152,8 @@ class _MatchingGamePageState extends State<MatchingGamePage> {
 
                         SizedBox(height: 50),
                         Container(
-                          width: 600,
-                          height: 190,
+                          width: MediaQuery.of(context).size.width , // Pobranie szerokości ekranu użytkownika
+                          height: MediaQuery.of(context).size.height * 0.21, // Pobranie wysokości ekranu użytkownika
                           padding: EdgeInsets.all(7), // Dodanie paddingu 5
                           decoration: BoxDecoration(// Dodanie czarnego tła
                             border: Border.all(color: Color(0xFFAFCBFF), width: 2), // Dodanie obramowania
@@ -184,7 +184,7 @@ class _MatchingGamePageState extends State<MatchingGamePage> {
                                   bool isCorrect = matchedCity.isNotEmpty && userMatches[matchedCity] == cityDistances[matchedCity];
                                   Color boxColor = isCorrect ? Colors.green : (matchedCity.isNotEmpty ? Color(0xFFEA5B60) : Color(0xFFAFCBFF));
                                   return Container(
-                                    width: 170,
+                                    width: MediaQuery.of(context).size.width * 0.412,
                                     height: 50,
                                     alignment: Alignment.center,
                                     color: boxColor,
