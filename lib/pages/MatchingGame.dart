@@ -95,7 +95,10 @@ class _MatchingGamePageState extends State<MatchingGamePage> {
                     return Column(
                       children: [
                         Container(
+                          width: 600,
+                          height: 190,
                           padding: EdgeInsets.all(7), // Dodanie paddingu 5
+
                           decoration: BoxDecoration(
                             border: Border.all(color: Color(0xFFB2BD7E), width: 2), // Dodanie obramowania
                             borderRadius: BorderRadius.circular(10), // Zaokrąglenie rogów
@@ -144,6 +147,8 @@ class _MatchingGamePageState extends State<MatchingGamePage> {
 
                         SizedBox(height: 50),
                         Container(
+                          width: 600,
+                          height: 190,
                           padding: EdgeInsets.all(7), // Dodanie paddingu 5
                           decoration: BoxDecoration(// Dodanie czarnego tła
                             border: Border.all(color: Color(0xFFB2BD7E), width: 2), // Dodanie obramowania
