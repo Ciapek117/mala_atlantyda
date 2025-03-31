@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
@@ -29,8 +30,21 @@ class _MatchingGamePageState extends State<MatchingGamePage> {
   @override
   void initState() {
     super.initState();
+    Future.delayed(Duration.zero, _showWelcomeDialog);
     userMatches = {for (var city in cityDistances.keys) city: null};
     shuffleDistances();
+  }
+
+  void _showWelcomeDialog(){
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.infoReverse,
+      animType: AnimType.scale,
+      title: 'Witaj w dopasywaniu do pary!',
+      desc: 'Dopasuj odpowiednie odległości do każdego z miast!',
+      btnOkText: 'Zaczynamy!',
+      btnOkOnPress: () {},
+    ).show();
   }
 
   void shuffleDistances() {
@@ -48,24 +62,15 @@ class _MatchingGamePageState extends State<MatchingGamePage> {
     });
 
     if (userMatches.entries.every((entry) => cityDistances[entry.key] == entry.value)) {
-      showDialog(
+      AwesomeDialog(
         context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("Gratulacje!"),
-            content: Text("Wszystkie dopasowania są poprawne!"),
-            actions: <Widget>[
-              TextButton(
-                child: Text("OK"),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
+        dialogType: DialogType.success,
+        animType: AnimType.scale,
+        title: 'Gratulacje!',
+        desc: 'Udało się wszytsko dopasować!',
+        btnOkText: 'Powrót',
+        btnOkOnPress: () {},
+      ).show();
     }
   }
 
