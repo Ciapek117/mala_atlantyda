@@ -18,3 +18,17 @@ class PongBall extends StatelessWidget {
     );
   }
 }
+
+/*
+      child: Container(
+        child: Positioned.fill(
+          child: Transform.scale(
+            scale: 2.0,
+            child: Image.asset(
+                "images/trojzab.png"),
+          ),
+        ),
+        ),
+        );
+
+*/
