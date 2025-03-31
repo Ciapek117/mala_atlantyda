@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mala_atlantyda/pages/GrandLubiczPage.dart';
 import 'package:mala_atlantyda/pages/MatchingGame.dart';
 import 'package:mala_atlantyda/pages/map_page.dart';
 
@@ -7,6 +8,7 @@ import 'package:mala_atlantyda/pages/HangmanGame.dart';
 import '../pages/MemoryGame.dart';
 import '../pages/MemoryGame.dart';
 import '../pages/PongGame.dart';
+import '../pages/LatarniaMorskaPage.dart';
 
 void main() {
   runApp(MyApp());
@@ -33,7 +35,9 @@ class _UserPageState extends State<UserPage> {
     ..[1] = "Dworzec (Wisielec)"
     ..[2] = "Lokalna organizacja turystyczna (Memory)"
     ..[3] = "Ratusz (Dopasuj miasta do km)"
-    ..[4] = "Osir (Pong)";
+    ..[4] = "Osir (Pong)"
+    ..[5] = "Latarnia Morska (Pytanie)"
+    ..[6] = "Grand Lubicz (Pytanie)";
   final String targetWord = "SZTORMOWY SZLAK";
   List<bool> isQuestionClicked = List.generate(12, (index) => false);
   int currentLetterIndex = 0;
@@ -154,6 +158,26 @@ class _UserPageState extends State<UserPage> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => PongGame()),
+                          );
+
+                          _addLetter(index);
+                        });
+                      } else if(index == 5){
+                        Future.delayed(Duration(milliseconds: 10), () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LatarniaMorskaPage()),
+                          );
+
+                          _addLetter(index);
+                        });
+                      } else if(index == 6){
+                        Future.delayed(Duration(milliseconds: 10), () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => GrandlubiczPage()),
                           );
 
                           _addLetter(index);
