@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -38,8 +39,11 @@ class _MemoryGameScreenState extends State<MemoryGameScreen> {
   @override
   void initState() {
     super.initState();
+    Future.delayed(Duration.zero, _showWelcomeDialog);
     _initializeGame();
   }
+
+
 
   void _initializeGame() {
     List<String> pairs = [...images, ...images];
@@ -49,6 +53,18 @@ class _MemoryGameScreenState extends State<MemoryGameScreen> {
     firstIndex = null;
     secondIndex = null;
     waiting = false;
+  }
+
+  void _showWelcomeDialog() {
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.infoReverse,
+      animType: AnimType.scale,
+      title: 'Witaj w grze Memory!',
+      desc: 'Znajdź wszystkie pary, żeby odkryć kolejną literkę!',
+      btnOkText: 'Zaczynamy!',
+      btnOkOnPress: () {},
+    ).show();
   }
 
   void _flipCard(int index) {
@@ -81,24 +97,17 @@ class _MemoryGameScreenState extends State<MemoryGameScreen> {
   }
 
   void _showWinDialog() {
-    showDialog(
+    AwesomeDialog(
       context: context,
-      barrierDismissible: false,
-      builder: (context) => AlertDialog(
-        backgroundColor: Color(0xFF0c4767),
-        title: Text("Gratulacje!", style: TextStyle(color: Color(0xFFEFA00B))),
-        content: Text("Udało Ci się dopasować wszystkie pary!", style: TextStyle(color: Color(0xFFEFA00B))),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              Navigator.of(context).pop();
-            },
-            child: Text("Powrót", style: TextStyle(color: Color(0xFFEFA00B))),
-          ),
-        ],
-      ),
-    );
+      dialogType: DialogType.success,
+      animType: AnimType.scale,
+      title: 'Gratulacje!',
+      desc: 'Ułożono wszystkie pary!',
+      btnOkText: 'Powrót!',
+      btnOkOnPress: () => {
+        Navigator.of(context).maybePop()
+      },
+    ).show();
   }
 
   @override
