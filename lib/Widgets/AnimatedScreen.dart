@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mala_atlantyda/Widgets/animations/fadeRoute.dart';
+import 'package:mala_atlantyda/Widgets/animations/mixRoute.dart';
+import 'package:mala_atlantyda/Widgets/animations/slideRoute.dart';
 import '../auth/UserPage.dart';
 
 class AnimatedScreen extends StatefulWidget {
@@ -44,7 +46,7 @@ class _AnimatedScreenState extends State<AnimatedScreen> {
     Future.delayed(Duration(milliseconds: 1500), () {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
-          Navigator.of(context).pushReplacement(fadeRoute(UserPage()));
+          Navigator.of(context).pushReplacement(mixRoute(UserPage()));
         }
       });
     });
@@ -69,12 +71,12 @@ class _AnimatedScreenState extends State<AnimatedScreen> {
               duration: Duration(seconds: 1),
               curve: Curves.easeOut,
               bottom: _tridentGoesUp
-                  ? screenHeight
-                  : (_showTrident ? screenHeight / 2 - 200 : -600),
+                  ? screenHeight + 100
+                  : (_showTrident ? screenHeight / 2 - 230 : -600),
               left: 0,
               right: 0,
               child: Transform.scale(
-                scale: 1.8,
+                scale: 2.7,
                 child: Image.asset("images/trojzab.png", fit: BoxFit.cover),
               ),
             ),
