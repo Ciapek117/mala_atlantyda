@@ -122,7 +122,7 @@ class _MatchingGamePageState extends State<MatchingGamePage> {
                                   data: city,
                                   feedback: Material(
                                     child: Container(
-                                      width: MediaQuery.of(context).size.width * 0.5,
+                                      width: MediaQuery.of(context).size.width * 0.35,
                                       height: MediaQuery.of(context).size.height * 0.06,
                                       color: Color(0xFF0075C4),
                                       alignment: Alignment.center,
@@ -151,8 +151,8 @@ class _MatchingGamePageState extends State<MatchingGamePage> {
 
                         SizedBox(height: 50),
                         Container(
-                          width: MediaQuery.of(context).size.width , // Pobranie szerokości ekranu użytkownika
-                          height: MediaQuery.of(context).size.height * 0.21, // Pobranie wysokości ekranu użytkownika
+                          width: MediaQuery.of(context).size.width * 0.8, // Zmniejszona szerokość
+                          height: MediaQuery.of(context).size.height * 0.22, // Zmniejszona wysokość
                           padding: EdgeInsets.all(7), // Dodanie paddingu 5
                           decoration: BoxDecoration(// Dodanie czarnego tła
                             border: Border.all(color: Color(0xFFAFCBFF), width: 2), // Dodanie obramowania
@@ -183,8 +183,8 @@ class _MatchingGamePageState extends State<MatchingGamePage> {
                                   bool isCorrect = matchedCity.isNotEmpty && userMatches[matchedCity] == cityDistances[matchedCity];
                                   Color boxColor = isCorrect ? Colors.green : (matchedCity.isNotEmpty ? Color(0xFFEA5B60) : Color(0xFFAFCBFF));
                                   return Container(
-                                    width: MediaQuery.of(context).size.width * 0.4,
-                                    height: 50,
+                                    width: MediaQuery.of(context).size.width * 0.35,
+                                    height: MediaQuery.of(context).size.height * 0.06,
                                     alignment: Alignment.center,
                                     color: boxColor,
                                     child: Text(
