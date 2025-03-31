@@ -13,6 +13,7 @@ class LatarniaMorskaPage extends StatelessWidget {
       home: QuestionPage(
         question: "Jakie imię i nazwisko w Latarni Morskiej ma najwięcej literek?",
         correctAnswer: "władysław zawrotniak",
+        fontSize: 26,
       ),
     );
   }

@@ -13,6 +13,7 @@ class GrandlubiczPage extends StatelessWidget {
       home: QuestionPage(
         question: "Ile okienek znajduje się w trójkącie na dachu Grand Lubicza?",
         correctAnswer: "100",
+        fontSize: 26,
       ),
     );
   }

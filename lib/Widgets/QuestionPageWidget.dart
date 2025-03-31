@@ -1,10 +1,13 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 
 class QuestionPage extends StatefulWidget {
   final String question;
   final String correctAnswer;
+  final double? fontSize;
 
-  QuestionPage({required this.question, required this.correctAnswer});
+  QuestionPage({required this.question, required this.correctAnswer, required this.fontSize});
 
   @override
   _QuestionPageState createState() => _QuestionPageState();
@@ -61,7 +64,7 @@ class _QuestionPageState extends State<QuestionPage> {
             Text(
               widget.question,
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 37, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: widget.fontSize, fontWeight: FontWeight.bold, color: Color(0xFFADE8F4)),
             ),
             SizedBox(height: 20),
             TextField(
@@ -71,6 +74,7 @@ class _QuestionPageState extends State<QuestionPage> {
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: "Wpisz odpowiedź",
+                hintStyle: TextStyle(color: Colors.white),
               ),
             ),
             SizedBox(height: 10),
