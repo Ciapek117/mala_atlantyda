@@ -135,38 +135,41 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF0c4767),
-      appBar: AppBar(
-        title: Text(
-          "Odkryj Hasło",
-          style: TextStyle(color: Color(0xFF0c4767), fontWeight: FontWeight.bold,),
-        ),
-        backgroundColor: Color(0xFF0c4767),
-        iconTheme: IconThemeData(color: Color(0xFFEFA00B)),
-      ),
-      body: Column(
+      body: Stack(
         children: [
-          SizedBox(height: 20),
-          Text("Ułóż Puzle!", style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Color(0xFFEFA00B))),
-          SizedBox(height: 10),
-          Container(
-            margin: EdgeInsets.all(8.0),
-            padding: EdgeInsets.all(2.0),
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.black, width: 4),
+          // Obraz tła
+          Positioned.fill(
+            child: Image.asset(
+              'images/puzzle_tlo.png', // Ścieżka do obrazu w katalogu assets
+              fit: BoxFit.cover,
             ),
-            child: AspectRatio(
-              aspectRatio: 1,
-              child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: gridSize,
-                ),
-                itemCount: tileOrder.length,
-                itemBuilder: (context, index) {
-                  return _buildTile(index);
-                },
+          ),
+          // Zawartość ekranu
+          Column(
+            children: [
+              SizedBox(height: 40),
+              Text(
+                "Ułóż Puzle!",
+                style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Color(0xFFEFA00B)),
               ),
-            ),
+              Container(
+                margin: EdgeInsets.all(40.0),
+                padding: EdgeInsets.all(2.0),
+
+                child: AspectRatio(
+                  aspectRatio: 1,
+                  child: GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: gridSize,
+                    ),
+                    itemCount: tileOrder.length,
+                    itemBuilder: (context, index) {
+                      return _buildTile(index);
+                    },
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -174,7 +177,7 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
   }
 
   Widget _buildTile(int index) {
-    if (image == null) return Container(color: Colors.grey, width: 100, height: 100);
+    if (image == null) return Container(color: Colors.transparent, width: 100, height: 100);
 
     int tileIndex = tileOrder[index];
     Rect sourceRect = tilePositions[tileIndex]!;
@@ -195,7 +198,7 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
             ),
           ),
           childWhenDragging: Container(
-            color: Colors.grey,
+            color: Colors.transparent,
             width: 100,
             height: 100,
           ),

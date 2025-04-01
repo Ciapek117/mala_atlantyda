@@ -14,6 +14,12 @@ class PongBoard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
+        Positioned.fill(
+          child: Image.asset(
+            'images/pong_tlo.png', // Ścieżka do obrazu w katalogu assets
+            fit: BoxFit.cover,
+          ),
+        ),
         if (gameLogic.countdown > 0)
           Center(
             child: Text(

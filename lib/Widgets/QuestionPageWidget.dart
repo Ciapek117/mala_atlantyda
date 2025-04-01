@@ -54,37 +54,51 @@ class _QuestionPageState extends State<QuestionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF0c4767),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              widget.question,
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: widget.fontSize, fontWeight: FontWeight.bold, color: Color(0xFFADE8F4)),
+      body: Stack(
+        children: [
+          // Obraz tła
+          Positioned.fill(
+            child: Image.asset(
+              'images/question_tlo.png', // Ścieżka do obrazu w katalogu assets
+              fit: BoxFit.cover,
             ),
-            SizedBox(height: 20),
-            TextField(
-              style: TextStyle(color: Colors.white),
-              controller: _controller,
-              textAlign: TextAlign.center,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: "Wpisz odpowiedź",
-                hintStyle: TextStyle(color: Colors.white),
-              ),
+          ),
+          // Warstwa z treścią
+          Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  widget.question,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: widget.fontSize, fontWeight: FontWeight.bold, color: Color(0xFFADE8F4)),
+                ),
+                SizedBox(height: 20),
+                TextField(
+                  style: TextStyle(color: Colors.white),
+                  controller: _controller,
+                  textAlign: TextAlign.center,
+                  decoration: InputDecoration(
+                    filled: true, // Wypełnienie pola
+                    fillColor: Colors.black.withOpacity(0.5), // Półprzezroczyste tło dla lepszej czytelności
+                    border: OutlineInputBorder(),
+                    hintText: "Wpisz odpowiedź",
+                    hintStyle: TextStyle(color: Colors.white),
+                  ),
+                ),
+                SizedBox(height: 10),
+                ElevatedButton(
+                  onPressed: checkAnswer,
+                  child: Text("Sprawdź"),
+                ),
+              ],
             ),
-            SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: checkAnswer,
-              child: Text("Sprawdź"),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
+
   }
 }
