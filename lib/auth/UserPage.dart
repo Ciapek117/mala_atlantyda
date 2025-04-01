@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:mala_atlantyda/pages/CodeUnlockPage.dart';
 import 'package:mala_atlantyda/pages/GrandLubiczPage.dart';
 import 'package:mala_atlantyda/pages/MatchingGame.dart';
 import 'package:mala_atlantyda/pages/ParkLinowyPage.dart';
 import 'package:mala_atlantyda/pages/map_page.dart';
+
 import 'package:mala_atlantyda/pages/JigsawPuzzlePage.dart';
 import 'package:mala_atlantyda/pages/HangmanGame.dart';
 import 'package:mala_atlantyda/pages/MemoryGame.dart';
@@ -43,7 +45,8 @@ class _UserPageState extends State<UserPage> {
     "Osir (Pong)",
     "Latarnia Morska (Pytanie)",
     "Grand Lubicz (Pytanie)",
-    "Park Linowy (Zagadka)"
+    "Park Linowy (Zagadka)",
+    "Chomczyńscy (Kod)"
   ];
 
   final List<Widget> gamePages = [
@@ -55,6 +58,7 @@ class _UserPageState extends State<UserPage> {
     LatarniaMorskaPage(),
     GrandlubiczPage(),
     ParkLinowyPage(),
+    CodeUnlockScreen(),
   ];
 
   @override

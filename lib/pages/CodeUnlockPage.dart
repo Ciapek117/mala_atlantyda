@@ -1,0 +1,123 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(CodeUnlockApp());
+}
+
+class CodeUnlockApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: CodeUnlockScreen(),
+    );
+  }
+}
+
+class CodeUnlockScreen extends StatefulWidget {
+  @override
+  _CodeUnlockScreenState createState() => _CodeUnlockScreenState();
+}
+
+class _CodeUnlockScreenState extends State<CodeUnlockScreen> {
+  List<int> numbers = [0, 0, 0, 0];
+  final List<int> correctCode = [1, 9, 6, 3];
+
+  void _increment(int index) {
+    setState(() {
+      if (numbers[index] < 10) numbers[index]++;
+    });
+  }
+
+  void _decrement(int index) {
+    setState(() {
+      if (numbers[index] > 0) {
+        numbers[index]--;
+      } else {
+        numbers[index] = 9;
+      }
+    });
+  }
+
+  bool _isCodeCorrect() {
+    return List.generate(numbers.length, (index) => numbers[index] == correctCode[index]).every((e) => e);
+  }
+
+  void _checkCode(BuildContext context) {
+    if (_isCodeCorrect()) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text("Gratulacje!"),
+          content: Text("Kod poprawny! Odblokowano dostęp."),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.pop(context);
+              },
+              child: Text("OK"),
+            )
+          ],
+        ),
+      );
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text("Błąd"),
+          content: Text("Kod niepoprawny. Spróbuj ponownie."),
+          actions: [TextButton(onPressed: () => Navigator.pop(context), child: Text("OK"))],
+        ),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(4, (index) {
+                return Column(
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.arrow_drop_up, size: 40),
+                      onPressed: () => _increment(index),
+                    ),
+                    Container(
+                      width: 60,
+                      height: 60,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        border: Border.all(width: 2),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        numbers[index].toString(),
+                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.arrow_drop_down, size: 40),
+                      onPressed: () => _decrement(index),
+                    ),
+                  ],
+                );
+              }),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () => _checkCode(context),
+              child: Text("Sprawdź kod"),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
