@@ -23,6 +23,7 @@ class _CodeUnlockScreenState extends State<CodeUnlockScreen> {
   List<int> numbers = [0, 0, 0, 0];
   final List<int> correctCode = [1, 9, 6, 3];
   bool isUnlocked = false;
+  List<Color> colors = List.filled(4, Color(0xFFAFCBFF));
 
   void _increment(int index) {
     setState(() {
@@ -48,37 +49,22 @@ class _CodeUnlockScreenState extends State<CodeUnlockScreen> {
     return List.generate(numbers.length, (index) => numbers[index] == correctCode[index]).every((e) => e);
   }
 
-  void _checkCode(BuildContext context) {
-    if (_isCodeCorrect()) {
-      setState(() {
-        isUnlocked = true;
-      });
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text("Gratulacje!"),
-          content: Text("Kod poprawny! Odblokowano dostęp."),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-                Navigator.pop(context);
-              },
-              child: Text("OK"),
-            )
-          ],
-        ),
-      );
-    } else {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text("Błąd"),
-          content: Text("Kod niepoprawny. Spróbuj ponownie."),
-          actions: [TextButton(onPressed: () => Navigator.pop(context), child: Text("OK"))],
-        ),
-      );
-    }
+  void _checkCode() {
+    setState(() {
+      for (int i = 0; i < numbers.length; i++) {
+        if (numbers[i] == correctCode[i]) {
+          colors[i] = Colors.green;
+
+          if(_isCodeCorrect()){
+            isUnlocked = true;
+          }
+        } else if (correctCode.contains(numbers[i])) {
+          colors[i] = Colors.orange;
+        } else {
+          colors[i] = Color(0xFFAFCBFF);
+        }
+      }
+    });
   }
 
   @override
@@ -87,9 +73,22 @@ class _CodeUnlockScreenState extends State<CodeUnlockScreen> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          Image.asset(
-            isUnlocked ? "images/done_code_tlo.png" : "images/code_tlo.png",
-            fit: BoxFit.cover,
+          AnimatedSwitcher(
+            duration: Duration(seconds: 1),
+            transitionBuilder: (child, animation) {
+              return FadeTransition(opacity: animation, child: child);
+            },
+            child: Container(
+              key: ValueKey(isUnlocked),
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(
+                    isUnlocked ? "images/done_code_tlo.png" : "images/code_tlo.png",
+                  ),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
           ),
           Center(
             child: Column(
@@ -107,7 +106,7 @@ class _CodeUnlockScreenState extends State<CodeUnlockScreen> {
                         Container(
                           width: 45,
                           height: 60,
-                          color: Color(0xFFAFCBFF),
+                          color: colors[index],
                           alignment: Alignment.center,
                           child: Text(
                             numbers[index].toString(),
@@ -122,8 +121,9 @@ class _CodeUnlockScreenState extends State<CodeUnlockScreen> {
                     );
                   }),
                 ),
+                SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: () => _checkCode(context),
+                  onPressed: _checkCode,
                   child: Text("Sprawdź kod"),
                 ),
               ],
