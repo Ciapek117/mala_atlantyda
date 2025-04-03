@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mala_atlantyda/pages/CodeUnlockPage.dart';
 import 'package:mala_atlantyda/pages/GrandLubiczPage.dart';
 import 'package:mala_atlantyda/pages/MatchingGame.dart';
+import 'package:mala_atlantyda/pages/MistralPage.dart';
 import 'package:mala_atlantyda/pages/ParkLinowyPage.dart';
 import 'package:mala_atlantyda/pages/map_page.dart';
 
@@ -49,7 +50,8 @@ class _UserPageState extends State<UserPage> {
     "Grand Lubicz (Pytanie)",
     "Park Linowy (Zagadka)",
     "Chomczyńscy (Kod)",
-    "Seekenmoor (Znajdźki)"
+    "Seekenmoor (Znajdźki)",
+    "Mistral (Pytania)"
   ];
 
   final List<Widget> gamePages = [
@@ -62,7 +64,8 @@ class _UserPageState extends State<UserPage> {
     GrandlubiczPage(),
     ParkLinowyPage(),
     CodeUnlockScreen(),
-    HiddenObjectGame()
+    HiddenObjectGame(),
+    MistralPage()
   ];
 
   @override
