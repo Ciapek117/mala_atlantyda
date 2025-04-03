@@ -1,5 +1,6 @@
-import 'package:flutter/foundation.dart';
+import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   runApp(HiddenObjectGame());
@@ -24,11 +25,52 @@ class HiddenObjectScreen extends StatefulWidget {
 class _HiddenObjectScreenState extends State<HiddenObjectScreen> {
   final List<String> objectsToFind = ['List woźnicy', 'Latarnia', 'Błędne ogniki'];
   final Set<String> foundObjects = {};
+  final Random random = Random();
+  late Offset circlePosition;
+  double circleSize = 50;
+  int clicks = 0;
+  bool isVisible = true;
+  double messageOpacity =0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _generateCircle();
+  }
+
+  void _generateCircle() {
+    // Losowanie pozycji w określonym przedziale
+    double x = random.nextDouble() * (400 - 100) + 100; // Od 100 do 400
+    double y = random.nextDouble() * (600 - 200) + 200; // Od 200 do 600
+    circlePosition = Offset(x, y);
+  }
 
   void _onTap(TapUpDetails details) {
+    if (!isVisible) return; // Jeśli kółko zniknęło, nie reaguj
+
     Offset position = details.localPosition;
-    if (kDebugMode) {
-      print('Tapped at: ${position.dx}, ${position.dy}');
+    double dx = position.dx - circlePosition.dx;
+    double dy = position.dy - circlePosition.dy;
+
+    if (dx * dx + dy * dy <= (circleSize / 2) * (circleSize / 2)) {
+      setState(() {
+        clicks++;
+        if (clicks == 1) {
+          circleSize = 40;
+        } else if (clicks == 2) {
+          circleSize = 30;
+        } else if (clicks == 3) {
+          setState(() {
+            isVisible = false;
+          });
+        }
+
+        // Przesunięcie kółka, aby zmniejszało się do środka
+        circlePosition = Offset(
+          circlePosition.dx + (50 - circleSize) / 2,
+          circlePosition.dy + (50 - circleSize) / 2,
+        );
+      });
     }
   }
 
@@ -42,20 +84,21 @@ class _HiddenObjectScreenState extends State<HiddenObjectScreen> {
             child: Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('images/lasek2.jpg'), //mozesz dodac inne image jak chcesz. na razie bedzie ten
+                  image: AssetImage('images/lasek3.jpg'),
                   fit: BoxFit.cover,
                 ),
               ),
             ),
           ),
+
           Positioned(
-            top: 20,
+            top: 40,
             left: 20,
             right: 20,
             child: Container(
               padding: EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.6),
+                color: Colors.blueGrey.withOpacity(0.6),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Column(
@@ -63,19 +106,20 @@ class _HiddenObjectScreenState extends State<HiddenObjectScreen> {
                 children: [
                   Text(
                     'Przedmioty do znalezienia:',
-                    style: TextStyle(
+                    style: GoogleFonts.poppins(
                       color: Colors.white,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   SizedBox(height: 8),
-                  ...objectsToFind.map((obj) {
+                  ...objectsToFind.map((objToFind) {
                     return Text(
-                      obj,
-                      style: TextStyle(
-                        color: foundObjects.contains(obj) ? Colors.greenAccent : Colors.white70,
-                        fontSize: 16,
+                      objToFind,
+                      style: GoogleFonts.poppins(
+                          color: Colors.amber,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold
                       ),
                     );
                   }).toList(),
@@ -83,25 +127,33 @@ class _HiddenObjectScreenState extends State<HiddenObjectScreen> {
               ),
             ),
           ),
-          Positioned(
-            bottom: 100,
-            left: 20,
-            right: 20,
-            child: ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blueAccent,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+
+          if (isVisible)
+            AnimatedPositioned(
+              duration: Duration(milliseconds: 200),
+              left: circlePosition.dx - circleSize / 2,
+              top: circlePosition.dy - circleSize / 2,
+              child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    clicks++;
+                    if (clicks == 1) circleSize = 40;
+                    else if (clicks == 2) circleSize = 30;
+                    else if (clicks == 3) isVisible = false;
+                  });
+                },
+                child: AnimatedContainer(
+                  duration: Duration(milliseconds: 200),
+                  width: circleSize,
+                  height: circleSize,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.white, width: 3),
+                    color: Colors.white.withOpacity(0.5),
+                  ),
                 ),
-                padding: EdgeInsets.symmetric(vertical: 12),
-              ),
-              child: Text(
-                'Podpowiedź',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),
-          ),
         ],
       ),
     );
