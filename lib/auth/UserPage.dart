@@ -11,6 +11,8 @@ import 'package:mala_atlantyda/pages/MemoryGame.dart';
 import 'package:mala_atlantyda/pages/PongGame.dart';
 import 'package:mala_atlantyda/pages/LatarniaMorskaPage.dart';
 
+import '../pages/HiddenObjectGame.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -46,7 +48,8 @@ class _UserPageState extends State<UserPage> {
     "Latarnia Morska (Pytanie)",
     "Grand Lubicz (Pytanie)",
     "Park Linowy (Zagadka)",
-    "Chomczyńscy (Kod)"
+    "Chomczyńscy (Kod)",
+    "Seekenmoor (Znajdźki)"
   ];
 
   final List<Widget> gamePages = [
@@ -59,6 +62,7 @@ class _UserPageState extends State<UserPage> {
     GrandlubiczPage(),
     ParkLinowyPage(),
     CodeUnlockScreen(),
+    HiddenObjectGame()
   ];
 
   @override
