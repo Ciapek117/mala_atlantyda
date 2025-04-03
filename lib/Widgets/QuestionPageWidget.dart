@@ -63,6 +63,11 @@ class _QuestionPageState extends State<QuestionPage> {
               fit: BoxFit.cover,
             ),
           ),
+          Positioned.fill(
+            child: Container(
+              color: Colors.black.withOpacity(0.4),
+            ),
+          ),
           // Warstwa z treścią
           Padding(
             padding: EdgeInsets.all(16.0),
@@ -81,9 +86,17 @@ class _QuestionPageState extends State<QuestionPage> {
                   controller: _controller,
                   textAlign: TextAlign.center,
                   decoration: InputDecoration(
-                    filled: true, // Wypełnienie pola
-                    fillColor: Colors.black.withOpacity(0.5), // Półprzezroczyste tło dla lepszej czytelności
-                    border: OutlineInputBorder(),
+                    filled: true,
+                    fillColor: Colors.black.withOpacity(0.5),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white),
+                    ),
                     hintText: "Wpisz odpowiedź",
                     hintStyle: TextStyle(color: Colors.white),
                   ),
@@ -91,6 +104,10 @@ class _QuestionPageState extends State<QuestionPage> {
                 SizedBox(height: 10),
                 ElevatedButton(
                   onPressed: checkAnswer,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFF0c4767), // Ciemny niebieski
+                    foregroundColor: Colors.white, // Biały tekst
+                  ),
                   child: Text("Sprawdź"),
                 ),
               ],
