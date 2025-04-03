@@ -80,9 +80,17 @@ class _UserPageState extends State<UserPage> {
       setState(() {
         isQuestionClicked[index] = true;
         currentLetterIndex++;
+
+        String letter = targetWord.replaceAll(' ', '')[currentLetterIndex - 1];
+
+        if (letter == 'S' && index + 1 < isQuestionClicked.length) {
+          currentLetterIndex++;
+        }
       });
     }
   }
+
+
 
   List<String> _getDisplayedWord() {
     List<String> words = targetWord.split(' ');
