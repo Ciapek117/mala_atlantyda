@@ -26,41 +26,56 @@ class _HiddenObjectScreenState extends State<HiddenObjectScreen> {
   final List<String> objectsToFind = ['List woźnicy', 'Latarnia', 'Błędne ogniki'];
   final Random random = Random();
   final int totalCircles = 10;
-  late List<Map<String, dynamic>> circles;
+  late List<Map<String, dynamic>> circles = [];
 
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     _generateCircles();
   }
 
   void _generateCircles() {
+    if (circles.isNotEmpty) return;
+
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     circles = [];
     while (circles.length < totalCircles) {
       Offset newPosition = Offset(
-        random.nextDouble() * (350 - 150) + 150,
-        random.nextDouble() * (600 - 200) + 200,
+        random.nextDouble() * (screenWidth * 0.7) + screenWidth * 0.15,
+        random.nextDouble() * (screenHeight * 0.6) + screenHeight * 0.2,
       );
 
       bool isFarEnough = circles.every((circle) {
-        return (newPosition - circle['position']).distance > 50.0;
+        return (newPosition - circle['position']).distance > screenWidth * 0.1;
       });
 
       if (isFarEnough) {
         circles.add({
           'position': newPosition,
-          'size': 50.0,
+          'size': screenWidth * 0.12,
           'clicks': 0,
           'visible': true,
+          'rotation': random.nextDouble() * 2 * pi,
+          'image': 'images/lisc.png',
         });
       }
     }
+
+    setState(() {});
   }
+
 
 
   void _onCircleTap(Map<String, dynamic> circle) {
     setState(() {
-      double oldSize = circle['size']; // Store previous size
+      double oldSize = circle['size'];
       circle['clicks']++;
 
       if (circle['clicks'] == 1) {
@@ -71,7 +86,7 @@ class _HiddenObjectScreenState extends State<HiddenObjectScreen> {
         circle['visible'] = false;
       }
 
-      double sizeChange = (oldSize - circle['size']) / 2; // Center the animation
+      double sizeChange = (oldSize - circle['size']) / 2;
 
       circle['position'] = Offset(
         circle['position'].dx + sizeChange - 10,
@@ -84,7 +99,6 @@ class _HiddenObjectScreenState extends State<HiddenObjectScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // The background remains clickable if needed, but now each circle handles its own tap.
       body: Stack(
         children: [
           Container(
@@ -142,14 +156,16 @@ class _HiddenObjectScreenState extends State<HiddenObjectScreen> {
               top: circle['position'].dy - circle['size'] / 2,
               child: GestureDetector(
                 onTap: () => _onCircleTap(circle),
-                child: AnimatedContainer(
-                  duration: Duration(milliseconds: 200),
-                  width: circle['size'],
-                  height: circle['size'],
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white, width: 3),
-                    color: Colors.white.withOpacity(0.5),
+                child: Transform.rotate(
+                  angle: circle['rotation'],
+                  child: AnimatedContainer(
+                    duration: Duration(milliseconds: 200),
+                    width: circle['size'],
+                    height: circle['size'],
+                    child: Image.asset(
+                      circle['image'],
+                      fit: BoxFit.contain,
+                    ),
                   ),
                 ),
               ),
