@@ -24,73 +24,77 @@ class HiddenObjectScreen extends StatefulWidget {
 
 class _HiddenObjectScreenState extends State<HiddenObjectScreen> {
   final List<String> objectsToFind = ['List woźnicy', 'Latarnia', 'Błędne ogniki'];
-  final Set<String> foundObjects = {};
   final Random random = Random();
-  late Offset circlePosition;
-  double circleSize = 50;
-  int clicks = 0;
-  bool isVisible = true;
-  double messageOpacity =0.0;
+  final int totalCircles = 10;
+  late List<Map<String, dynamic>> circles;
 
   @override
   void initState() {
     super.initState();
-    _generateCircle();
+    _generateCircles();
   }
 
-  void _generateCircle() {
-    // Losowanie pozycji w określonym przedziale
-    double x = random.nextDouble() * (400 - 100) + 100; // Od 100 do 400
-    double y = random.nextDouble() * (600 - 200) + 200; // Od 200 do 600
-    circlePosition = Offset(x, y);
-  }
+  void _generateCircles() {
+    circles = [];
+    while (circles.length < totalCircles) {
+      Offset newPosition = Offset(
+        random.nextDouble() * (350 - 150) + 150,
+        random.nextDouble() * (600 - 200) + 200,
+      );
 
-  void _onTap(TapUpDetails details) {
-    if (!isVisible) return; // Jeśli kółko zniknęło, nie reaguj
-
-    Offset position = details.localPosition;
-    double dx = position.dx - circlePosition.dx;
-    double dy = position.dy - circlePosition.dy;
-
-    if (dx * dx + dy * dy <= (circleSize / 2) * (circleSize / 2)) {
-      setState(() {
-        clicks++;
-        if (clicks == 1) {
-          circleSize = 40;
-        } else if (clicks == 2) {
-          circleSize = 30;
-        } else if (clicks == 3) {
-          setState(() {
-            isVisible = false;
-          });
-        }
-
-        // Przesunięcie kółka, aby zmniejszało się do środka
-        circlePosition = Offset(
-          circlePosition.dx + (50 - circleSize) / 2,
-          circlePosition.dy + (50 - circleSize) / 2,
-        );
+      bool isFarEnough = circles.every((circle) {
+        return (newPosition - circle['position']).distance > 50.0;
       });
+
+      if (isFarEnough) {
+        circles.add({
+          'position': newPosition,
+          'size': 50.0,
+          'clicks': 0,
+          'visible': true,
+        });
+      }
     }
   }
+
+
+  void _onCircleTap(Map<String, dynamic> circle) {
+    setState(() {
+      double oldSize = circle['size']; // Store previous size
+      circle['clicks']++;
+
+      if (circle['clicks'] == 1) {
+        circle['size'] = 40.0;
+      } else if (circle['clicks'] == 2) {
+        circle['size'] = 30.0;
+      } else if (circle['clicks'] == 3) {
+        circle['visible'] = false;
+      }
+
+      double sizeChange = (oldSize - circle['size']) / 2; // Center the animation
+
+      circle['position'] = Offset(
+        circle['position'].dx + sizeChange - 10,
+        circle['position'].dy + sizeChange - 10,
+      );
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // The background remains clickable if needed, but now each circle handles its own tap.
       body: Stack(
         children: [
-          GestureDetector(
-            onTapUp: _onTap,
-            child: Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('images/lasek3.jpg'),
-                  fit: BoxFit.cover,
-                ),
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('images/lasek3.jpg'),
+                fit: BoxFit.cover,
               ),
             ),
           ),
-
           Positioned(
             top: 40,
             left: 20,
@@ -117,9 +121,9 @@ class _HiddenObjectScreenState extends State<HiddenObjectScreen> {
                     return Text(
                       objToFind,
                       style: GoogleFonts.poppins(
-                          color: Colors.amber,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold
+                        color: Colors.amber,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
                       ),
                     );
                   }).toList(),
@@ -127,25 +131,21 @@ class _HiddenObjectScreenState extends State<HiddenObjectScreen> {
               ),
             ),
           ),
-
-          if (isVisible)
-            AnimatedPositioned(
+          ...circles.asMap().entries.map((entry) {
+            int index = entry.key;
+            var circle = entry.value;
+            if (!circle['visible']) return SizedBox.shrink();
+            return AnimatedPositioned(
+              key: ValueKey(index),
               duration: Duration(milliseconds: 200),
-              left: circlePosition.dx - circleSize / 2,
-              top: circlePosition.dy - circleSize / 2,
+              left: circle['position'].dx - circle['size'] / 2,
+              top: circle['position'].dy - circle['size'] / 2,
               child: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    clicks++;
-                    if (clicks == 1) circleSize = 40;
-                    else if (clicks == 2) circleSize = 30;
-                    else if (clicks == 3) isVisible = false;
-                  });
-                },
+                onTap: () => _onCircleTap(circle),
                 child: AnimatedContainer(
                   duration: Duration(milliseconds: 200),
-                  width: circleSize,
-                  height: circleSize,
+                  width: circle['size'],
+                  height: circle['size'],
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(color: Colors.white, width: 3),
@@ -153,7 +153,8 @@ class _HiddenObjectScreenState extends State<HiddenObjectScreen> {
                   ),
                 ),
               ),
-            ),
+            );
+          }).toList(),
         ],
       ),
     );
