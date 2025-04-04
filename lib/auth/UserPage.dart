@@ -4,6 +4,7 @@ import 'package:mala_atlantyda/pages/GrandLubiczPage.dart';
 import 'package:mala_atlantyda/pages/MatchingGame.dart';
 import 'package:mala_atlantyda/pages/MistralPage.dart';
 import 'package:mala_atlantyda/pages/ParkLinowyPage.dart';
+import 'package:mala_atlantyda/pages/RebusPage.dart';
 import 'package:mala_atlantyda/pages/map_page.dart';
 
 import 'package:mala_atlantyda/pages/JigsawPuzzlePage.dart';
@@ -51,7 +52,8 @@ class _UserPageState extends State<UserPage> {
     "Park Linowy (Zagadka)",
     "Chomczyńscy (Kod)",
     "Seekenmoor (Znajdźki)",
-    "Mistral (Pytania)"
+    "Mistral (Pytania)",
+    "Bunkry Bluchera (Rebus)"
   ];
 
   final List<Widget> gamePages = [
@@ -65,7 +67,8 @@ class _UserPageState extends State<UserPage> {
     ParkLinowyPage(),
     CodeUnlockScreen(),
     HiddenObjectGame(),
-    MistralPage()
+    MistralPage(),
+    RebusGame()
   ];
 
   @override
@@ -83,7 +86,7 @@ class _UserPageState extends State<UserPage> {
 
         String letter = targetWord.replaceAll(' ', '')[currentLetterIndex - 1];
 
-        if (letter == 'S' && index + 1 < isQuestionClicked.length) {
+        if (letter == 'S' && index  < isQuestionClicked.length) {
           currentLetterIndex++;
         }
       });
