@@ -23,6 +23,8 @@ class RebusGame extends StatefulWidget {
 class _RebusGameState extends State<RebusGame> {
   final List<Map<String, String>> rebuses = [
     {"image": "images/rebus.png", "answer": "ustka"},
+    {"image": "images/grunwald.png", "answer": "bitwa pod grunwaldem"},
+    {"image": "images/chrzest.png", "answer": "chrzest polski"},
   ];
 
   late Map<String, String> currentRebus;
@@ -38,18 +40,20 @@ class _RebusGameState extends State<RebusGame> {
     });
   }
 
-  void _showResultDialog(String message) {
+  void _showResultDialog(String message, String title, bool correct) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Wynik"),
+          title: Text(title),
           content: Text(message),
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.pop(context);
-                Navigator.pop(context);
+                Navigator.pop(context); // zamyka dialog
+                if (correct) {
+                  Navigator.pop(context); // wraca na poprzednią stronę tylko jeśli poprawna odpowiedź
+                }
               },
               child: Text("OK"),
             ),
@@ -59,11 +63,12 @@ class _RebusGameState extends State<RebusGame> {
     );
   }
 
+
   void _checkAnswer() {
     if (_controller.text.trim().toLowerCase() == currentRebus["answer"]!.toLowerCase()) {
-      _showResultDialog("🎉 Poprawna odpowiedź!");
+      _showResultDialog("Poprawna odpowiedź!", "Gratulacje", true);
     } else {
-      _showResultDialog("❌ Spróbuj ponownie!");
+      _showResultDialog("Spróbuj ponownie!", "Błędna odpowiedź", false);
     }
   }
 
