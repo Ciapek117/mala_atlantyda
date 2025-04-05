@@ -229,15 +229,6 @@ class _HiddenObjectScreenState extends State<HiddenObjectScreen> {
                     );
                   }).toList(),
 
-                  ElevatedButton(onPressed: (){
-                    foundObjects.add('List woźnicy');
-                    foundObjects.add('List woźnicy');
-                    foundObjects.add('List woźnicy');
-                    if(foundObjects.length == objectsToFind.length){
-                      _showWinDialog();
-                    }
-
-                  }, child: Text('test'))
                 ],
               ),
             ),

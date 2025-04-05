@@ -218,11 +218,33 @@ class _UserPageState extends State<UserPage> {
                       ? () => _navigateToGame(index)
                       : () {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Podejdź bliżej miejsca, aby odblokować to zadanie.'),
-                        duration: Duration(seconds: 2),
+                      SnackBar(
+                        content: Row(
+                          children: [
+                            Icon(Icons.error, color: Colors.white),  // Dodaj ikonę (np. błąd)
+                            const SizedBox(width: 10),
+                            const Expanded(
+                              child: Text(
+                                'Podejdź bliżej tego miejsca, aby odblokować to zadanie.',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        backgroundColor: Colors.red,
+                        duration: const Duration(seconds: 3),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        behavior: SnackBarBehavior.floating,
+                        margin: const EdgeInsets.all(20),
                       ),
                     );
+
+                    Navigator.pop(context);
                   },
                 );
               },
