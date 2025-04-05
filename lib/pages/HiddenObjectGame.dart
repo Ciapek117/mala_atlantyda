@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -32,6 +33,7 @@ class _HiddenObjectScreenState extends State<HiddenObjectScreen> {
   @override
   void initState() {
     super.initState();
+    Future.delayed(Duration.zero, _showInfoDialog);
   }
 
   @override
@@ -129,7 +131,12 @@ class _HiddenObjectScreenState extends State<HiddenObjectScreen> {
         circle['found'] = true;
         if (!foundObjects.contains(circle['type']) && objectsToFind.contains(circle['type'])) {
           foundObjects.add(circle['type']);
+          if(foundObjects.length == objectsToFind.length){
+            _showWinDialog();
+      }
         }
+
+
 
 
         double sizeChange = (oldSize - circle['size']) / 2;
@@ -141,6 +148,35 @@ class _HiddenObjectScreenState extends State<HiddenObjectScreen> {
       }
 
     });
+  }
+
+  void _showWinDialog(){
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.success,
+      animType: AnimType.scale,
+      title: 'Gratulacje!',
+      desc: 'Udało się znaleźć wszystkie potrzebne przedmioty!',
+      btnOkText: 'Powrót',
+      btnOkOnPress: () {
+        Navigator.pop(context);
+        Navigator.pop(context);
+      },
+
+
+    ).show();
+  }
+
+  void _showInfoDialog(){
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.infoReverse,
+      animType: AnimType.scale,
+      title: 'Witaj w poszukiwaczu!',
+      desc: 'W liściach zostały ukryte 3 przedmioty. Znajdź je klikając w liście!',
+      btnOkText: 'Zaczynamy!',
+      btnOkOnPress: () {},
+    ).show();
   }
 
 
@@ -195,6 +231,15 @@ class _HiddenObjectScreenState extends State<HiddenObjectScreen> {
                     );
                   }).toList(),
 
+                  ElevatedButton(onPressed: (){
+                    foundObjects.add('List woźnicy');
+                    foundObjects.add('List woźnicy');
+                    foundObjects.add('List woźnicy');
+                    if(foundObjects.length == objectsToFind.length){
+                      _showWinDialog();
+                    }
+
+                  }, child: Text('test'))
                 ],
               ),
             ),

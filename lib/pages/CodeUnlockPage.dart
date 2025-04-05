@@ -137,7 +137,6 @@ class _CodeUnlockScreenState extends State<CodeUnlockScreen> {
       btnOkText: 'Powrót',
       btnOkOnPress: () {
         Navigator.pop(context);
-
       },
     ).show();
   }
