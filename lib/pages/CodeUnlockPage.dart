@@ -16,9 +16,14 @@ class CodeUnlockApp extends StatelessWidget {
 }
 
 class CodeUnlockScreen extends StatefulWidget {
+  final VoidCallback? onTaskCompleted;
+
+  const CodeUnlockScreen({Key? key, this.onTaskCompleted}) : super(key: key);
+
   @override
   _CodeUnlockScreenState createState() => _CodeUnlockScreenState();
 }
+
 
 class _CodeUnlockScreenState extends State<CodeUnlockScreen> {
   List<int> numbers = [0, 0, 0, 0];
@@ -70,6 +75,9 @@ class _CodeUnlockScreenState extends State<CodeUnlockScreen> {
           if (_isCodeCorrect() && !isDialogShown) {
             isDialogShown = true;
             isUnlocked = true;
+
+            widget.onTaskCompleted?.call();
+
             Future.delayed(Duration(seconds: 2), () {
               _showWinDialog();
             });
@@ -136,7 +144,7 @@ class _CodeUnlockScreenState extends State<CodeUnlockScreen> {
       desc: 'Udało się wszystko dopasować!',
       btnOkText: 'Powrót',
       btnOkOnPress: () {
-        Navigator.pop(context);
+        Navigator.pop(context, true);
       },
     ).show();
   }

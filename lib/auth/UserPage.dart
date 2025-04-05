@@ -77,21 +77,24 @@ class _UserPageState extends State<UserPage> {
     RebusGame()
   ];
 
-  final List<LatLng> taskLocations = // Tutaj podajesz koordynaty dla każdego z zadań po których później
-                                    // będzie sie ustalało dystans od zadania
+  //kordy Alan - 54.46356746843195, 17.013808329119247
+  //kordy Martyna - 54.47158802598502, 16.981100295406417
+
+
+  final List<LatLng> taskLocations =
   [
-    LatLng(54.46356746843195, 17.013808329119247), // KORDY DOMU ALANA
-    LatLng(54.46356746843195, 17.013808329119247),
-    LatLng(54.5970, 18.8055),
-    LatLng(54.5985, 18.8092),
-    LatLng(54.6002, 18.8121),
-    LatLng(54.6011, 18.8105),
-    LatLng(54.6020, 18.8145),
-    LatLng(54.47158802598502, 16.981100295406417), // KORDY DOMU MARTYNY
-    LatLng(54.47158802598502, 16.981100295406417),
-    LatLng(54.47158802598502, 16.981100295406417),
-    LatLng(54.6075, 18.8200),
-    LatLng(54.6085, 18.8210),
+    LatLng(54.46356746843195, 17.013808329119247), //puzzle
+    LatLng(54.46356746843195, 17.013808329119247), //wisielec
+    LatLng(54.5970, 18.8055), // memory
+    LatLng(54.5985, 18.8092), // miasto do km
+    LatLng(54.6002, 18.8121), //pong
+    LatLng(54.6011, 18.8105), //pytanie Latarnia
+    LatLng(54.6020, 18.8145), // pytanie Grand Lubicz
+    LatLng(54.47158802598502, 16.981100295406417), // zagadka park linowy
+    LatLng(54.47158802598502, 16.981100295406417), //kod / sejf
+    LatLng(54.47158802598502, 16.981100295406417), //znajdźki / liścieee
+    LatLng(54.6075, 18.8200), // pytanie mistral
+    LatLng(54.6085, 18.8210), // rebus
   ];
 
   int currentLetterIndex = 0;
@@ -161,13 +164,37 @@ class _UserPageState extends State<UserPage> {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => gamePages[index]),
-        );
-        _addLetter(index);
+        ).then((result) {
+          if (result == true) {
+            onTaskCompleted(index);
+          }
+        });
+
+        //_addLetter(index);
       });
     } else {
-      _addLetter(index);
+      //_addLetter(index);
     }
   }
+
+  void onTaskCompleted(int index) {
+    if (!isQuestionClicked[index] && currentLetterIndex < targetWord.replaceAll(' ', '').length) {
+      setState(() {
+        isQuestionClicked[index] = true;
+        String letter = targetWord.replaceAll(' ', '')[currentLetterIndex];
+
+        currentLetterIndex++;
+
+        if (currentLetterIndex < targetWord.replaceAll(' ', '').length) {
+          if (letter == 'S') {
+            currentLetterIndex++;
+          }
+        }
+      });
+    }
+  }
+
+
 
   @override
   Widget build(BuildContext context) {

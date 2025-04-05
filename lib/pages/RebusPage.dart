@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -41,26 +42,21 @@ class _RebusGameState extends State<RebusGame> {
   }
 
   void _showResultDialog(String message, String title, bool correct) {
-    showDialog(
+    AwesomeDialog(
       context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(title),
-          content: Text(message),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context); // zamyka dialog
-                if (correct) {
-                  Navigator.pop(context); // wraca na poprzednią stronę tylko jeśli poprawna odpowiedź
-                }
-              },
-              child: Text("OK"),
-            ),
-          ],
-        );
+      dialogType: correct ? DialogType.success : DialogType.error,
+      animType: AnimType.scale,
+      title: title,
+      desc: message,
+      btnOkText: correct ? 'Powrót' : 'Spróbuj ponownie',
+      btnOkOnPress: () {
+        if(correct) {
+          Navigator.pop(context, true);
+          Navigator.maybePop(context, true);
+        }
+
       },
-    );
+    ).show();
   }
 
 

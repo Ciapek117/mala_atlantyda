@@ -36,8 +36,8 @@ class _PongGameState extends State<PongGame> {
       desc: "Zdobyłeś ${gameLogic.winScore} punktów!",
       btnOkText: "OK",
       btnOkOnPress: () {
-        Navigator.pop(context);
-        Navigator.maybePop(context);
+        Navigator.pop(context,true);
+        Navigator.maybePop(context,true);
       },
     ).show();
   }

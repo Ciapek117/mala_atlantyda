@@ -34,7 +34,7 @@ class GameOverScreen extends StatelessWidget {
                 backgroundColor: Color(0xFF0c4767),
                 foregroundColor: Colors.white,
               ),
-              onPressed: isWinner ? () => Navigator.of(context).maybePop() : onRestart,
+              onPressed: isWinner ? () => Navigator.pop(context, true) : onRestart,
               child: Text(
                 isWinner ? "Powrót" : "Zagraj ponownie",
                 style: TextStyle(fontSize: 18),

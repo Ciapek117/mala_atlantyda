@@ -1,5 +1,6 @@
 import 'dart:ffi';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 
 class QuestionPage extends StatefulWidget {
@@ -18,36 +19,31 @@ class _QuestionPageState extends State<QuestionPage> {
 
   void checkAnswer() {
     if (_controller.text.trim().toLowerCase() == widget.correctAnswer.toLowerCase()) {
-      showDialog(
+      AwesomeDialog(
         context: context,
-        builder: (context) => AlertDialog(
-          title: Text("Gratulacje!"),
-          content: Text("Brawo! To poprawna odpowiedź!"),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-                Navigator.pop(context);
-              },
-              child: Text("OK"),
-            ),
-          ],
-        ),
-      );
+        dialogType: DialogType.success,
+        animType: AnimType.scale,
+        title: 'Gratulacje!',
+        desc: 'Udało się poprawnie odpowiedzieć na pytanie!',
+        btnOkText: 'Powrót',
+        btnOkOnPress: () {
+          //Navigator.maybePop(context);
+          Navigator.pop(context,true);
+        },
+      ).show();
     } else {
-      showDialog(
+      AwesomeDialog(
         context: context,
-        builder: (context) => AlertDialog(
-          title: Text("Błędna odpowiedź!"),
-          content: Text("Spróbuj ponownie."),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text("OK"),
-            ),
-          ],
-        ),
-      );
+        dialogType: DialogType.error,
+        animType: AnimType.scale,
+        title: 'Niestety!',
+        desc: 'Odpowiedź była błędna. Spróbuj ponownie!',
+        btnOkText: 'Jeszcze raz!',
+        btnOkOnPress: () {
+          //Navigator.maybePop(context);
+          Navigator.pop(context);
+        },
+      ).show();
     }
   }
 

@@ -70,8 +70,8 @@ class _MatchingGamePageState extends State<MatchingGamePage> {
         desc: 'Udało się wszystko dopasować!',
         btnOkText: 'Powrót',
         btnOkOnPress: () {
-          Navigator.pop(context);
-          Navigator.maybePop(context);
+          Navigator.pop(context,true);
+          Navigator.maybePop(context,true);
         },
       ).show();
     }

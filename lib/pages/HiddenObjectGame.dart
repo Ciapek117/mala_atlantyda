@@ -159,7 +159,7 @@ class _HiddenObjectScreenState extends State<HiddenObjectScreen> {
       desc: 'Udało się znaleźć wszystkie potrzebne przedmioty!',
       btnOkText: 'Powrót',
       btnOkOnPress: () {
-        Navigator.of(context).pop(); // wraca do ekranu głównego
+        Navigator.pop(context, true); // wraca do ekranu głównego
       },
     ).show();
   }

@@ -123,7 +123,7 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
-              Navigator.of(context).pop();
+              Navigator.pop(context,true);
             },
             child: Text("OK", style: TextStyle(color: Color(0xFFEFA00B))),
           ),

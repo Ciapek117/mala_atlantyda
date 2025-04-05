@@ -105,7 +105,7 @@ class _MemoryGameScreenState extends State<MemoryGameScreen> {
       desc: 'Ułożono wszystkie pary!',
       btnOkText: 'Powrót!',
       btnOkOnPress: () => {
-        Navigator.of(context).maybePop()
+       Navigator.pop(context,true)
       },
     ).show();
   }
