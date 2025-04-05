@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -46,6 +47,7 @@ class _UserPageState extends State<UserPage> {
   late List<bool> isQuestionClicked;
   late List<bool> isTaskNearby;
   LatLng? _userPosition; // Klasa z google_maps pozwala ustalić pozycje użytkownika
+  List<LatLng> currentTaskLocations = [];
 
   final List<String> questions = [
     "Zejście Plaża (Puzzle)",
@@ -97,6 +99,38 @@ class _UserPageState extends State<UserPage> {
     LatLng(54.6085, 18.8210), // rebus
   ];
 
+  final List<LatLng> taskLocations2 = //chata Alana only /debugging mode
+  [
+    LatLng(54.46356746843195, 17.013808329119247), //puzzle
+    LatLng(54.46356746843195, 17.013808329119247), //wisielec
+    LatLng(54.46356746843195, 17.013808329119247), // miasto do km
+    LatLng(54.46356746843195, 17.013808329119247), //pong
+    LatLng(54.46356746843195, 17.013808329119247), //pytanie Latarnia
+    LatLng(54.46356746843195, 17.013808329119247), // memory
+    LatLng(54.46356746843195, 17.013808329119247), // pytanie Grand Lubicz
+    LatLng(54.46356746843195, 17.013808329119247), // zagadka park linowy
+    LatLng(54.46356746843195, 17.013808329119247), //kod / sejf
+    LatLng(54.46356746843195, 17.013808329119247), //znajdźki / liścieee
+    LatLng(54.46356746843195, 17.013808329119247), // pytanie mistral
+    LatLng(54.46356746843195, 17.013808329119247), // rebus
+  ];
+
+  final List<LatLng> taskLocations3 = //chata Martyny only /debugging mode
+  [
+    LatLng(54.47158802598502, 16.981100295406417), //puzzle
+    LatLng(54.47158802598502, 16.981100295406417), //wisielec
+    LatLng(54.47158802598502, 16.981100295406417), // memory
+    LatLng(54.47158802598502, 16.981100295406417), // miasto do km
+    LatLng(54.47158802598502, 16.981100295406417), //pong
+    LatLng(54.47158802598502, 16.981100295406417), //pytanie Latarnia
+    LatLng(54.47158802598502, 16.981100295406417), // pytanie Grand Lubicz
+    LatLng(54.47158802598502, 16.981100295406417), // zagadka park linowy
+    LatLng(54.47158802598502, 16.981100295406417), //kod / sejf
+    LatLng(54.47158802598502, 16.981100295406417), //znajdźki / liścieee
+    LatLng(54.47158802598502, 16.981100295406417), // pytanie mistral
+    LatLng(54.47158802598502, 16.981100295406417), // rebus
+  ];
+
   int currentLetterIndex = 0;
 
   @override
@@ -105,27 +139,31 @@ class _UserPageState extends State<UserPage> {
     isQuestionClicked = List.generate(questions.length, (_) => false);
     isTaskNearby = List.generate(questions.length, (_) => false);
     _checkUserProximity();
+    currentTaskLocations = taskLocations;
     Timer.periodic(const Duration(seconds: 10), (_) => _checkUserProximity());
   }
 
-  Future<void> _checkUserProximity() async { // Metoda sprawdzająca aktulna pozycja uzytkownika
+  Future<void> _checkUserProximity() async {
     Position position = await Geolocator.getCurrentPosition();
     setState(() {
       _userPosition = LatLng(position.latitude, position.longitude);
-      for (int i = 0; i < taskLocations.length; i++) {
+      for (int i = 0; i < currentTaskLocations.length; i++) {
         double distance = Geolocator.distanceBetween(
-          position.latitude, // szerokość geograficzna
-          position.longitude, // dłyugość geograficzna
-          taskLocations[i].latitude,
-          taskLocations[i].longitude,
+          position.latitude,
+          position.longitude,
+          currentTaskLocations[i].latitude,
+          currentTaskLocations[i].longitude,
         );
-        isTaskNearby[i] = distance < 100; // Zezwala na zadanie gdy uyżytkownik jest nie więcej niż 100m prszy zadaniu
+        isTaskNearby[i] = distance < 100;
       }
     });
   }
 
+
   void _addLetter(int index) {
-    if (!isQuestionClicked[index] && currentLetterIndex < targetWord.replaceAll(' ', '').length) {
+    if (!isQuestionClicked[index] && currentLetterIndex < targetWord
+        .replaceAll(' ', '')
+        .length) {
       setState(() {
         isQuestionClicked[index] = true;
         currentLetterIndex++;
@@ -178,14 +216,18 @@ class _UserPageState extends State<UserPage> {
   }
 
   void onTaskCompleted(int index) {
-    if (!isQuestionClicked[index] && currentLetterIndex < targetWord.replaceAll(' ', '').length) {
+    if (!isQuestionClicked[index] && currentLetterIndex < targetWord
+        .replaceAll(' ', '')
+        .length) {
       setState(() {
         isQuestionClicked[index] = true;
         String letter = targetWord.replaceAll(' ', '')[currentLetterIndex];
 
         currentLetterIndex++;
 
-        if (currentLetterIndex < targetWord.replaceAll(' ', '').length) {
+        if (currentLetterIndex < targetWord
+            .replaceAll(' ', '')
+            .length) {
           if (letter == 'S') {
             currentLetterIndex++;
           }
@@ -194,6 +236,29 @@ class _UserPageState extends State<UserPage> {
     }
   }
 
+  void _changeTaskLocations(int choice) {
+    setState(() {
+      if (choice == 1) {
+        currentTaskLocations = taskLocations;
+      } else if (choice == 2) {
+        currentTaskLocations = taskLocations2;
+      } else if (choice == 3) {
+        currentTaskLocations = taskLocations3;
+      }
+      _checkUserProximity();
+
+      AwesomeDialog(
+        context: context,
+        dialogType: DialogType.infoReverse,
+        animType: AnimType.scale,
+        title: 'Info!',
+        desc: 'Zmieniono lokalizacje. Sprawdź zadania!',
+        btnOkText: 'skibidi',
+        btnOkOnPress: () {},
+      ).show();
+
+    });
+  }
 
 
   @override
@@ -203,7 +268,8 @@ class _UserPageState extends State<UserPage> {
       appBar: AppBar(
         title: const Text(
           "Odkryj Hasło",
-          style: TextStyle(color: Color(0xFFEFA00B), fontWeight: FontWeight.bold),
+          style: TextStyle(
+              color: Color(0xFFEFA00B), fontWeight: FontWeight.bold),
         ),
         backgroundColor: const Color(0xFF0a344a),
         iconTheme: const IconThemeData(color: Color(0xFFEFA00B)),
@@ -248,7 +314,8 @@ class _UserPageState extends State<UserPage> {
                       SnackBar(
                         content: Row(
                           children: [
-                            Icon(Icons.error, color: Colors.white),  // Dodaj ikonę (np. błąd)
+                            Icon(Icons.error, color: Colors.white),
+                            // Dodaj ikonę (np. błąd)
                             const SizedBox(width: 10),
                             const Expanded(
                               child: Text(
@@ -307,6 +374,27 @@ class _UserPageState extends State<UserPage> {
               ),
             ),
           ).toList(),
+          const SizedBox(height: 50),
+          // Przycisk zmieniający lokalizacje w jednym wierszu
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: () => _changeTaskLocations(1),
+                child: const Text("oryginalne"),
+              ),
+              const SizedBox(width: 7), // Odstęp między przyciskami
+              ElevatedButton(
+                onPressed: () => _changeTaskLocations(2),
+                child: const Text("dom Alana"),
+              ),
+              const SizedBox(width: 7),
+              ElevatedButton(
+                onPressed: () => _changeTaskLocations(3),
+                child: const Text("dom Martyny"),
+              ),
+            ],
+          ),
           const SizedBox(height: 50),
           SizedBox(
             height: 500,
