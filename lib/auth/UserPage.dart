@@ -45,7 +45,7 @@ class _UserPageState extends State<UserPage> {
   static const String targetWord = "SZTORMOWY SZLAK";
   late List<bool> isQuestionClicked;
   late List<bool> isTaskNearby;
-  LatLng? _userPosition;
+  LatLng? _userPosition; // Klasa z google_maps pozwala ustalić pozycje użytkownika
 
   final List<String> questions = [
     "Zejście Plaża (Puzzle)",
@@ -72,21 +72,23 @@ class _UserPageState extends State<UserPage> {
     GrandlubiczPage(),
     ParkLinowyPage(),
     CodeUnlockScreen(),
-    HiddenObjectGame(),
+    HiddenObjectScreen(),
     MistralPage(),
     RebusGame()
   ];
 
-  final List<LatLng> taskLocations = [
+  final List<LatLng> taskLocations = // Tutaj podajesz koordynaty dla każdego z zadań po których później
+                                    // będzie sie ustalało dystans od zadania
+  [
+    LatLng(54.46356746843195, 17.013808329119247), // KORDY DOMU ALANA
     LatLng(54.46356746843195, 17.013808329119247),
-    LatLng(54.5957, 18.8083),
     LatLng(54.5970, 18.8055),
     LatLng(54.5985, 18.8092),
     LatLng(54.6002, 18.8121),
     LatLng(54.6011, 18.8105),
     LatLng(54.6020, 18.8145),
-    LatLng(54.6040, 18.8170),
-    LatLng(54.6055, 18.8185),
+    LatLng(54.47158802598502, 16.981100295406417), // KORDY DOMU MARTYNY
+    LatLng(54.47158802598502, 16.981100295406417),
     LatLng(54.47158802598502, 16.981100295406417),
     LatLng(54.6075, 18.8200),
     LatLng(54.6085, 18.8210),
@@ -103,18 +105,18 @@ class _UserPageState extends State<UserPage> {
     Timer.periodic(const Duration(seconds: 10), (_) => _checkUserProximity());
   }
 
-  Future<void> _checkUserProximity() async {
+  Future<void> _checkUserProximity() async { // Metoda sprawdzająca aktulna pozycja uzytkownika
     Position position = await Geolocator.getCurrentPosition();
     setState(() {
       _userPosition = LatLng(position.latitude, position.longitude);
       for (int i = 0; i < taskLocations.length; i++) {
         double distance = Geolocator.distanceBetween(
-          position.latitude,
-          position.longitude,
+          position.latitude, // szerokość geograficzna
+          position.longitude, // dłyugość geograficzna
           taskLocations[i].latitude,
           taskLocations[i].longitude,
         );
-        isTaskNearby[i] = distance < 100;
+        isTaskNearby[i] = distance < 100; // Zezwala na zadanie gdy uyżytkownik jest nie więcej niż 100m prszy zadaniu
       }
     });
   }

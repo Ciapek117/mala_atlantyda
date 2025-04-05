@@ -150,7 +150,7 @@ class _HiddenObjectScreenState extends State<HiddenObjectScreen> {
     });
   }
 
-  void _showWinDialog(){
+  void _showWinDialog() {
     AwesomeDialog(
       context: context,
       dialogType: DialogType.success,
@@ -159,13 +159,11 @@ class _HiddenObjectScreenState extends State<HiddenObjectScreen> {
       desc: 'Udało się znaleźć wszystkie potrzebne przedmioty!',
       btnOkText: 'Powrót',
       btnOkOnPress: () {
-        Navigator.pop(context);
-        Navigator.pop(context);
+        Navigator.of(context).pop(); // wraca do ekranu głównego
       },
-
-
     ).show();
   }
+
 
   void _showInfoDialog(){
     AwesomeDialog(
