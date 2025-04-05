@@ -23,7 +23,8 @@ class HiddenObjectScreen extends StatefulWidget {
 }
 
 class _HiddenObjectScreenState extends State<HiddenObjectScreen> {
-  final List<String> objectsToFind = ['List woźnicy', 'Latarnia', 'Błędne ogniki'];
+  final List<String> objectsToFind = ['List woźnicy', 'Latarnia', 'Zniszczony płaszcz'];
+  final List<String> foundObjects = [];
   final Random random = Random();
   final int totalCircles = 10;
   late List<Map<String, dynamic>> circles = [];
@@ -59,14 +60,29 @@ class _HiddenObjectScreenState extends State<HiddenObjectScreen> {
       if (isFarEnough) {
         circles.add({
           'position': newPosition,
-          'size': screenWidth * 0.12,
+          'size': screenWidth * 0.15,
           'clicks': 0,
           'visible': true,
           'rotation': random.nextDouble() * 2 * pi,
           'image': 'images/lisc.png',
+          'type': 'none',
+          'found': false
         });
       }
     }
+
+    Set<int> usedIndices = {};
+
+    while (usedIndices.length < objectsToFind.length) {
+      usedIndices.add(random.nextInt(circles.length));
+    }
+
+    int i = 0;
+    for (int index in usedIndices) {
+      circles[index]['type'] = objectsToFind[i];
+      i++;
+    }
+
 
     setState(() {});
   }
@@ -74,6 +90,10 @@ class _HiddenObjectScreenState extends State<HiddenObjectScreen> {
 
 
   void _onCircleTap(Map<String, dynamic> circle) {
+    if(circle['found'] == true) return;
+
+    final screenWidth = MediaQuery.of(context).size.width;
+
     setState(() {
       double oldSize = circle['size'];
       circle['clicks']++;
@@ -84,14 +104,42 @@ class _HiddenObjectScreenState extends State<HiddenObjectScreen> {
         circle['size'] = 30.0;
       } else if (circle['clicks'] == 3) {
         circle['visible'] = false;
+
+
+        if (circle['type'] == 'List woźnicy' || circle['type'] == 'Latarnia' ||
+            circle['type'] == 'Zniszczony płaszcz') {
+          circle['visible'] = true;
+          circle['size'] = screenWidth * 0.17;
+          circle['clicks'] = 3;
+          circle['rotation'] = 0.0;
+
+          switch (circle['type']) {
+            case 'List woźnicy':
+              circle['image'] = 'images/list.png';
+              break;
+            case 'Latarnia':
+              circle['image'] = 'images/latarnia.png';
+              break;
+            case 'Zniszczony płaszcz':
+              circle['image'] = 'images/plaszcz.png';
+              break;
+          }
+        }
+
+        circle['found'] = true;
+        if (!foundObjects.contains(circle['type']) && objectsToFind.contains(circle['type'])) {
+          foundObjects.add(circle['type']);
+        }
+
+
+        double sizeChange = (oldSize - circle['size']) / 2;
+
+        circle['position'] = Offset(
+          circle['position'].dx + sizeChange - 10,
+          circle['position'].dy + sizeChange - 10,
+        );
       }
 
-      double sizeChange = (oldSize - circle['size']) / 2;
-
-      circle['position'] = Offset(
-        circle['position'].dx + sizeChange - 10,
-        circle['position'].dy + sizeChange - 10,
-      );
     });
   }
 
@@ -126,21 +174,27 @@ class _HiddenObjectScreenState extends State<HiddenObjectScreen> {
                     'Przedmioty do znalezienia:',
                     style: GoogleFonts.poppins(
                       color: Colors.white,
-                      fontSize: 18,
+                      fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   SizedBox(height: 8),
                   ...objectsToFind.map((objToFind) {
-                    return Text(
-                      objToFind,
-                      style: GoogleFonts.poppins(
-                        color: Colors.amber,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    bool isFound = foundObjects.contains(objToFind);
+                    return Row(
+                      children: [
+                        Text(
+                          isFound ? '✅ $objToFind' : objToFind,
+                          style: GoogleFonts.poppins(
+                            color: isFound ? Colors.greenAccent : Colors.amber,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     );
                   }).toList(),
+
                 ],
               ),
             ),
