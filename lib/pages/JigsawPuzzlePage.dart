@@ -147,7 +147,7 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
           // Zawartość ekranu
           Column(
             children: [
-              SizedBox(height: 180),
+              SizedBox(height: 140),
               Text(
                 "Ułóż Puzle!",
                 style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Color(0xFFEFA00B)),
