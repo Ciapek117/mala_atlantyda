@@ -63,7 +63,7 @@ class _MistralPageState extends State<MistralPage> {
               content: Text("Odpowiedziałeś na wszytskie pytania poprawnie."),
               actions: [
                 TextButton(
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () => Navigator.pop(context, true),
                   child: Text("OK"),
                 )
               ],
