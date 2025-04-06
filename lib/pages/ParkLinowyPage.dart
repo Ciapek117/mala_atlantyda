@@ -7,19 +7,16 @@ class ParkLinowyPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: QuestionPage(
-        question: """W parku linowym są trzy odcinki trasy:
+    return QuestionPage(
+      question: """W parku linowym są trzy odcinki trasy:
         •	Pierwszy odcinek ma 80 metrów.
       •	Drugi odcinek jest o 40 metrów krótszy od pierwszego.
       •	Trzeci odcinek ma dwa razy większą długość niż drugi.
 
       Jaka jest całkowita długość trasy?""",
-        correctAnswer: "100",
+      correctAnswer: "100",
 
-        fontSize: 26,
-      ),
+      fontSize: 26,
     );
   }
 }
