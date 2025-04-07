@@ -14,7 +14,7 @@ class ParkLinowyPage extends StatelessWidget {
       •	Trzeci odcinek ma dwa razy większą długość niż drugi.
 
       Jaka jest całkowita długość trasy?""",
-      correctAnswer: "100",
+      correctAnswer: "200",
 
       fontSize: 26,
     );

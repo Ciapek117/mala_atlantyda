@@ -15,6 +15,7 @@ class _PongGameState extends State<PongGame> {
 
   void _showGameInfoDialog() {
       AwesomeDialog(
+        dismissOnTouchOutside: false,
         context: context,
         dialogType: DialogType.infoReverse,
         animType: AnimType.scale,
@@ -29,6 +30,7 @@ class _PongGameState extends State<PongGame> {
 
   void _showWinDialog() {
     AwesomeDialog(
+      dismissOnTouchOutside: false,
       context: context,
       dialogType: DialogType.success,
       animType: AnimType.bottomSlide,

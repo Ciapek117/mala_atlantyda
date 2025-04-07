@@ -39,6 +39,7 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
 
   void _showWelcomeDialog() {
     AwesomeDialog(
+      dismissOnTouchOutside: false,
       context: context,
       dialogType: DialogType.infoReverse,
       animType: AnimType.scale,

@@ -43,6 +43,7 @@ class _RebusGameState extends State<RebusGame> {
 
   void _showResultDialog(String message, String title, bool correct) {
     AwesomeDialog(
+      dismissOnTouchOutside: false,
       context: context,
       dialogType: correct ? DialogType.success : DialogType.error,
       animType: AnimType.scale,

@@ -160,6 +160,7 @@ class _UserPageState extends State<UserPage> {
       _checkUserProximity();
 
       AwesomeDialog(
+        dismissOnTouchOutside: false,
         context: context,
         dialogType: DialogType.infoReverse,
         animType: AnimType.scale,

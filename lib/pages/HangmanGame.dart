@@ -34,6 +34,7 @@ class _HangmanGameState extends State<HangmanGame> {
 
   void _showWelcomeDialog() {
     AwesomeDialog(
+      dismissOnTouchOutside: false,
       context: context,
       dialogType: DialogType.infoReverse,
       animType: AnimType.scale,

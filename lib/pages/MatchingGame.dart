@@ -37,6 +37,7 @@ class _MatchingGamePageState extends State<MatchingGamePage> {
 
   void _showWelcomeDialog(){
     AwesomeDialog(
+      dismissOnTouchOutside: false,
       context: context,
       dialogType: DialogType.infoReverse,
       animType: AnimType.scale,
@@ -63,6 +64,7 @@ class _MatchingGamePageState extends State<MatchingGamePage> {
 
     if (userMatches.entries.every((entry) => cityDistances[entry.key] == entry.value)) {
       AwesomeDialog(
+        dismissOnTouchOutside: false,
         context: context,
         dialogType: DialogType.success,
         animType: AnimType.scale,

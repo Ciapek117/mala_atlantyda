@@ -2,6 +2,8 @@ import 'dart:math';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 
+import '../Widgets/FlipCard.dart';
+
 void main() {
   runApp(MemoryGame());
 }
@@ -57,6 +59,7 @@ class _MemoryGameScreenState extends State<MemoryGameScreen> {
 
   void _showWelcomeDialog() {
     AwesomeDialog(
+      dismissOnTouchOutside: false,
       context: context,
       dialogType: DialogType.infoReverse,
       animType: AnimType.scale,
@@ -98,6 +101,7 @@ class _MemoryGameScreenState extends State<MemoryGameScreen> {
 
   void _showWinDialog() {
     AwesomeDialog(
+      dismissOnTouchOutside: false,
       context: context,
       dialogType: DialogType.success,
       animType: AnimType.scale,
@@ -144,27 +148,28 @@ class _MemoryGameScreenState extends State<MemoryGameScreen> {
                   ),
                   itemCount: gameGrid.length,
                   itemBuilder: (context, index) {
-                    return GestureDetector(
+                    return FlipCard(
+                      flipped: cardFlipped[index] || index == firstIndex || index == secondIndex,
                       onTap: () => _flipCard(index),
-                      child: Container(
+                      front: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Image.asset(
+                          gameGrid[index],
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          height: double.infinity,
+                        ),
+                      ),
+                      back: Container(
                         decoration: BoxDecoration(
                           color: Color(0xFF0075C4),
                           borderRadius: BorderRadius.circular(10),
                         ),
                         alignment: Alignment.center,
-                        child: cardFlipped[index] || index == firstIndex || index == secondIndex
-                            ? ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: Image.asset(
-                            gameGrid[index],
-                            fit: BoxFit.cover,
-                            width: double.infinity,
-                            height: double.infinity,
-                          ),
-                        )
-                            : Icon(Icons.question_mark, size: 32, color: Colors.white),
+                        child: Icon(Icons.question_mark, size: 32, color: Colors.white),
                       ),
                     );
+
                   },
                 ),
               ),

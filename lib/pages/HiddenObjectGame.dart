@@ -152,6 +152,7 @@ class _HiddenObjectScreenState extends State<HiddenObjectScreen> {
 
   void _showWinDialog() {
     AwesomeDialog(
+      dismissOnTouchOutside: false,
       context: context,
       dialogType: DialogType.success,
       animType: AnimType.scale,
@@ -167,6 +168,7 @@ class _HiddenObjectScreenState extends State<HiddenObjectScreen> {
 
   void _showInfoDialog(){
     AwesomeDialog(
+      dismissOnTouchOutside: false,
       context: context,
       dialogType: DialogType.infoReverse,
       animType: AnimType.scale,

@@ -123,6 +123,7 @@ class PongLogic {
 
     if (context != null) {
       AwesomeDialog(
+        dismissOnTouchOutside: false,
         context: context,
         dialogType: DialogType.error,
         animType: AnimType.topSlide,

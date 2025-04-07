@@ -94,6 +94,7 @@ class _CodeUnlockScreenState extends State<CodeUnlockScreen> {
   void PromtDialog(int attemptValue){
     if(attemptValue == 3){
       AwesomeDialog(
+        dismissOnTouchOutside: false,
         context: context,
         dialogType: DialogType.infoReverse,
         animType: AnimType.scale,
@@ -103,6 +104,7 @@ class _CodeUnlockScreenState extends State<CodeUnlockScreen> {
       ).show();
     } else if(attemptValue == 5){
       AwesomeDialog(
+          dismissOnTouchOutside: false,
         context: context,
         dialogType: DialogType.infoReverse,
         animType: AnimType.scale,
@@ -112,6 +114,7 @@ class _CodeUnlockScreenState extends State<CodeUnlockScreen> {
       ).show();
     } else if(attemptValue == 7){
       AwesomeDialog(
+          dismissOnTouchOutside: false,
         context: context,
         dialogType: DialogType.infoReverse,
         animType: AnimType.scale,
@@ -125,6 +128,7 @@ class _CodeUnlockScreenState extends State<CodeUnlockScreen> {
 
   void _showWelcomeDialog(){
     AwesomeDialog(
+      dismissOnTouchOutside: false,
       context: context,
       dialogType: DialogType.infoReverse,
       animType: AnimType.scale,
@@ -137,6 +141,7 @@ class _CodeUnlockScreenState extends State<CodeUnlockScreen> {
 
   void _showWinDialog() {
     AwesomeDialog(
+      dismissOnTouchOutside: false,
       context: context,
       dialogType: DialogType.success,
       animType: AnimType.scale,

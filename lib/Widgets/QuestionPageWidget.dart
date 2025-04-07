@@ -20,6 +20,7 @@ class _QuestionPageState extends State<QuestionPage> {
   void checkAnswer() {
     if (_controller.text.trim().toLowerCase() == widget.correctAnswer.toLowerCase()) {
       AwesomeDialog(
+        dismissOnTouchOutside: false,
         context: context,
         dialogType: DialogType.success,
         animType: AnimType.scale,
@@ -33,6 +34,7 @@ class _QuestionPageState extends State<QuestionPage> {
       ).show();
     } else {
       AwesomeDialog(
+        dismissOnTouchOutside: false,
         context: context,
         dialogType: DialogType.error,
         animType: AnimType.scale,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 
 class MistralPage extends StatefulWidget {
   @override
@@ -48,102 +49,109 @@ class _MistralPageState extends State<MistralPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
-          Image.asset(
-            "images/question_tlo.png",
-            fit: BoxFit.cover,
-          ),
-          Center(
-            child: allCorrect
-                ? AlertDialog(
-              title: Text("Gratulacje!"),
-              content: Text("Odpowiedziałeś na wszytskie pytania poprawnie."),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context, true),
-                  child: Text("OK"),
-                )
-              ],
-            )
-                : Container(
-              width: 300,
-              height: 500,
-              alignment: Alignment.center,
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: isCorrect[currentIndex]
-                    ? Colors.green.withOpacity(0.7)
-                    : containerColor,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 5)],
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    questions[currentIndex],
-                    style: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+      if (allCorrect) {
+        Future.delayed(Duration.zero, () {
+          AwesomeDialog(
+            context: context,
+            dialogType: DialogType.success,
+            animType: AnimType.scale,
+            title: 'Gratulacje!',
+            desc: 'Udało się poprawnie odpowiedzieć na pytanie!',
+            btnOkText: 'Powrót',
+            btnOkOnPress: () {
+              Navigator.pop(context, true);
+            },
+            dismissOnTouchOutside: false,
+          ).show();
+        });
+      }
+
+      return Scaffold(
+        body: Stack(
+          fit: StackFit.expand,
+          children: [
+            Image.asset(
+              "images/question_tlo.png",
+              fit: BoxFit.cover,
+            ),
+            Center(
+              child: Container(
+                width: 300,
+                height: 500,
+                alignment: Alignment.center,
+                padding: EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: isCorrect[currentIndex]
+                      ? Colors.green.withOpacity(0.7)
+                      : containerColor,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 5)],
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      questions[currentIndex],
+                      style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: 10),
-                  TextField(
-                    controller: controllers[currentIndex],
-                    enabled: !isCorrect[currentIndex],
-                    style: TextStyle(color: Colors.white),
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white.withOpacity(0.3),
-                      border: OutlineInputBorder(),
-                      hintStyle: TextStyle(color: Colors.white70),
+                    SizedBox(height: 10),
+                    TextField(
+                      controller: controllers[currentIndex],
+                      enabled: !isCorrect[currentIndex],
+                      style: TextStyle(color: Colors.white),
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white.withOpacity(0.3),
+                        border: OutlineInputBorder(),
+                        hintStyle: TextStyle(color: Colors.white70),
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      IconButton(
-                        icon: Image.asset(
-                          "images/arrow_left.png",
-                          width: 30,
-                          color: currentIndex > 0 ? Color(0xff0075C4) : Colors.grey,
+                    SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                          icon: Image.asset(
+                            "images/arrow_left.png",
+                            width: 30,
+                            color: currentIndex > 0 ? Color(0xff0075C4) : Colors.grey,
+                          ),
+                          onPressed: currentIndex > 0
+                              ? () => setState(() => currentIndex--)
+                              : null,
                         ),
-                        onPressed: currentIndex > 0
-                            ? () => setState(() => currentIndex--)
-                            : null,
-                      ),
-                      ElevatedButton(
-                        onPressed: isCorrect[currentIndex] ? null : checkAnswer,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue.withOpacity(0.8),
+                        ElevatedButton(
+                          onPressed: isCorrect[currentIndex] ? null : checkAnswer,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue.withOpacity(0.8),
+                          ),
+                          child: Text("Sprawdź", style: TextStyle(color: Colors.white)),
                         ),
-                        child: Text("Sprawdź", style: TextStyle(color: Colors.white)),
-                      ),
-                      IconButton(
-                        icon: Image.asset(
-                          "images/arrow_right.png",
-                          width: 30,
-                          color: currentIndex < questions.length - 1 ? Color(0xff0075C4) : Colors.grey,
+                        IconButton(
+                          icon: Image.asset(
+                            "images/arrow_right.png",
+                            width: 30,
+                            color: currentIndex < questions.length - 1 ? Color(0xff0075C4) : Colors.grey,
+                          ),
+                          onPressed: currentIndex < questions.length - 1
+                              ? () => setState(() => currentIndex++)
+                              : null,
                         ),
-                        onPressed: currentIndex < questions.length - 1
-                            ? () => setState(() => currentIndex++)
-                            : null,
-                      ),
-                    ],
-                  )
-                ],
+                      ],
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    }
   }
-}
+
