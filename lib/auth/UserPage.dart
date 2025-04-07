@@ -160,7 +160,6 @@ class _UserPageState extends State<UserPage> {
       _checkUserProximity();
 
       AwesomeDialog(
-        dismissOnTouchOutside: false,
         context: context,
         dialogType: DialogType.infoReverse,
         animType: AnimType.scale,
@@ -203,11 +202,16 @@ class _UserPageState extends State<UserPage> {
       appBar: AppBar(
         title: const Text(
           "Odkryj Hasło",
-          style: TextStyle(color: Color(0xFFEFA00B), fontWeight: FontWeight.bold),
+          style: TextStyle(
+            color: Color(0xFFEFA00B),
+            fontWeight: FontWeight.bold,
+          ),
         ),
-        backgroundColor: const Color(0xFF0a344a),
+        backgroundColor: const Color(0xFF0a344a).withOpacity(0.80), // półprzezroczysty
+        elevation: 0,
         iconTheme: const IconThemeData(color: Color(0xFFEFA00B)),
       ),
+      extendBodyBehindAppBar: true,
       drawer: _buildDrawer(),
       body: _buildBody(),
     );
@@ -288,60 +292,82 @@ class _UserPageState extends State<UserPage> {
   }
 
   Widget _buildBody() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Text(
-            "HASŁO:",
-            style: TextStyle(
-              fontSize: 40,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFFEFA00B),
-            ),
+    return Stack(
+      children: [
+        // Tło – lokalny asset
+        Positioned.fill(
+          child: Image.asset(
+            'images/memory_tlo.png', // <-- Ścieżka do Twojego obrazka
+            fit: BoxFit.cover,
           ),
-          ..._getDisplayedWord().map(
-                (line) => Text(
-              line,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 40,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFFAFCBFF),
-              ),
-            ),
+        ),
+
+        // Przykrycie półprzezroczystą warstwą, jeśli chcesz lepszy kontrast
+        Positioned.fill(
+          child: Container(
+            color: Colors.black.withOpacity(0.4), // opcjonalne
           ),
-          const SizedBox(height: 50),
-          Row(
+        ),
+
+        // Treść strony
+        Center(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ElevatedButton(
-                onPressed: () => _changeTaskLocations(1),
-                child: const Text("oryginalne"),
+              const SizedBox(height: 100), // dystans od AppBar
+              const Text(
+                "HASŁO:",
+                style: TextStyle(
+                  fontSize: 40,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFFEFA00B),
+                ),
               ),
-              const SizedBox(width: 7),
-              ElevatedButton(
-                onPressed: () => _changeTaskLocations(2),
-                child: const Text("dom Alana"),
+              ..._getDisplayedWord().map(
+                    (line) => Text(
+                  line,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFFAFCBFF),
+                  ),
+                ),
               ),
-              const SizedBox(width: 7),
-              ElevatedButton(
-                onPressed: () => _changeTaskLocations(3),
-                child: const Text("dom Martyny"),
+              const SizedBox(height: 50),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () => _changeTaskLocations(1),
+                    child: const Text("oryginalne"),
+                  ),
+                  const SizedBox(width: 7),
+                  ElevatedButton(
+                    onPressed: () => _changeTaskLocations(2),
+                    child: const Text("dom Alana"),
+                  ),
+                  const SizedBox(width: 7),
+                  ElevatedButton(
+                    onPressed: () => _changeTaskLocations(3),
+                    child: const Text("dom Martyny"),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 50),
+              SizedBox(
+                height: 500,
+                child: MapPage(
+                  taskLocations: currentTaskLocations,
+                  taskNames: questions,
+                  onMapCreated: _onMapCreated,
+                ),
               ),
             ],
           ),
-          const SizedBox(height: 50),
-          SizedBox(
-            height: 500,
-            child: MapPage(
-              taskLocations: currentTaskLocations,
-              taskNames: questions,
-              onMapCreated: _onMapCreated, // ✅ przekazujemy kontroler
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
+
   }
 }
