@@ -19,22 +19,6 @@ import 'package:mala_atlantyda/pages/PongGame.dart';
 import 'package:mala_atlantyda/pages/LatarniaMorskaPage.dart';
 import '../pages/HiddenObjectGame.dart';
 
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: UserPage(),
-    );
-  }
-}
-
 class UserPage extends StatefulWidget {
   const UserPage({super.key});
 
@@ -46,8 +30,9 @@ class _UserPageState extends State<UserPage> {
   static const String targetWord = "SZTORMOWY SZLAK";
   late List<bool> isQuestionClicked;
   late List<bool> isTaskNearby;
-  LatLng? _userPosition; // Klasa z google_maps pozwala ustalić pozycje użytkownika
+  LatLng? _userPosition;
   List<LatLng> currentTaskLocations = [];
+  GoogleMapController? _mapController; // ✅ dodano kontroler mapy
 
   final List<String> questions = [
     "Zejście Plaża (Puzzle)",
@@ -79,57 +64,30 @@ class _UserPageState extends State<UserPage> {
     RebusGame()
   ];
 
-  //kordy Alan - 54.46356746843195, 17.013808329119247
-  //kordy Martyna - 54.47158802598502, 16.981100295406417
-
-
-  final List<LatLng> taskLocations =
-  [
-    LatLng(54.46356746843195, 17.013808329119247), //puzzle
-    LatLng(54.46356746843195, 17.013808329119247), //wisielec
-    LatLng(54.5970, 18.8055), // memory
-    LatLng(54.5985, 18.8092), // miasto do km
-    LatLng(54.6002, 18.8121), //pong
-    LatLng(54.6011, 18.8105), //pytanie Latarnia
-    LatLng(54.6020, 18.8145), // pytanie Grand Lubicz
-    LatLng(54.47158802598502, 16.981100295406417), // zagadka park linowy
-    LatLng(54.47158802598502, 16.981100295406417), //kod / sejf
-    LatLng(54.47158802598502, 16.981100295406417), //znajdźki / liścieee
-    LatLng(54.6075, 18.8200), // pytanie mistral
-    LatLng(54.6085, 18.8210), // rebus
+  final List<LatLng> taskLocations = [
+    LatLng(54.46356746843195, 17.013808329119247),
+    LatLng(54.46356746843195, 17.013808329119247),
+    LatLng(54.5970, 18.8055),
+    LatLng(54.4654254459461, 17.011524815426004),
+    LatLng(54.6002, 18.8121),
+    LatLng(54.6011, 18.8105),
+    LatLng(54.6020, 18.8145),
+    LatLng(54.47158802598502, 16.981100295406417),
+    LatLng(54.47158802598502, 16.981100295406417),
+    LatLng(54.47158802598502, 16.981100295406417),
+    LatLng(54.6075, 18.8200),
+    LatLng(54.6085, 18.8210),
   ];
 
-  final List<LatLng> taskLocations2 = //chata Alana only /debugging mode
-  [
-    LatLng(54.46356746843195, 17.013808329119247), //puzzle
-    LatLng(54.46356746843195, 17.013808329119247), //wisielec
-    LatLng(54.46356746843195, 17.013808329119247), // miasto do km
-    LatLng(54.46356746843195, 17.013808329119247), //pong
-    LatLng(54.46356746843195, 17.013808329119247), //pytanie Latarnia
-    LatLng(54.46356746843195, 17.013808329119247), // memory
-    LatLng(54.46356746843195, 17.013808329119247), // pytanie Grand Lubicz
-    LatLng(54.46356746843195, 17.013808329119247), // zagadka park linowy
-    LatLng(54.46356746843195, 17.013808329119247), //kod / sejf
-    LatLng(54.46356746843195, 17.013808329119247), //znajdźki / liścieee
-    LatLng(54.46356746843195, 17.013808329119247), // pytanie mistral
-    LatLng(54.46356746843195, 17.013808329119247), // rebus
-  ];
+  final List<LatLng> taskLocations2 = List.generate(
+    12,
+        (_) => LatLng(54.46356746843195, 17.013808329119247),
+  );
 
-  final List<LatLng> taskLocations3 = //chata Martyny only /debugging mode
-  [
-    LatLng(54.47158802598502, 16.981100295406417), //puzzle
-    LatLng(54.47158802598502, 16.981100295406417), //wisielec
-    LatLng(54.47158802598502, 16.981100295406417), // memory
-    LatLng(54.47158802598502, 16.981100295406417), // miasto do km
-    LatLng(54.47158802598502, 16.981100295406417), //pong
-    LatLng(54.47158802598502, 16.981100295406417), //pytanie Latarnia
-    LatLng(54.47158802598502, 16.981100295406417), // pytanie Grand Lubicz
-    LatLng(54.47158802598502, 16.981100295406417), // zagadka park linowy
-    LatLng(54.47158802598502, 16.981100295406417), //kod / sejf
-    LatLng(54.47158802598502, 16.981100295406417), //znajdźki / liścieee
-    LatLng(54.47158802598502, 16.981100295406417), // pytanie mistral
-    LatLng(54.47158802598502, 16.981100295406417), // rebus
-  ];
+  final List<LatLng> taskLocations3 = List.generate(
+    12,
+        (_) => LatLng(54.47158802598502, 16.981100295406417),
+  );
 
   int currentLetterIndex = 0;
 
@@ -138,8 +96,8 @@ class _UserPageState extends State<UserPage> {
     super.initState();
     isQuestionClicked = List.generate(questions.length, (_) => false);
     isTaskNearby = List.generate(questions.length, (_) => false);
-    _checkUserProximity();
     currentTaskLocations = taskLocations;
+    _checkUserProximity();
     Timer.periodic(const Duration(seconds: 10), (_) => _checkUserProximity());
   }
 
@@ -159,40 +117,19 @@ class _UserPageState extends State<UserPage> {
     });
   }
 
-
-  void _addLetter(int index) {
-    if (!isQuestionClicked[index] && currentLetterIndex < targetWord
-        .replaceAll(' ', '')
-        .length) {
+  void onTaskCompleted(int index) {
+    if (!isQuestionClicked[index] &&
+        currentLetterIndex < targetWord.replaceAll(' ', '').length) {
       setState(() {
         isQuestionClicked[index] = true;
+        String letter = targetWord.replaceAll(' ', '')[currentLetterIndex];
         currentLetterIndex++;
-        String letter = targetWord.replaceAll(' ', '')[currentLetterIndex - 1];
-        if (letter == 'S' && index < isQuestionClicked.length) {
+
+        if (letter == 'S' && currentLetterIndex < targetWord.replaceAll(' ', '').length) {
           currentLetterIndex++;
         }
       });
     }
-  }
-
-  List<String> _getDisplayedWord() {
-    List<String> words = targetWord.split(' ');
-    List<String> revealedWords = [];
-    int revealedCount = 0;
-
-    for (var word in words) {
-      String revealedWord = "";
-      for (int i = 0; i < word.length; i++) {
-        if (revealedCount < currentLetterIndex) {
-          revealedWord += word[i];
-          revealedCount++;
-        } else {
-          revealedWord += "_ ";
-        }
-      }
-      revealedWords.add(revealedWord);
-    }
-    return revealedWords;
   }
 
   void _navigateToGame(int index) {
@@ -207,31 +144,6 @@ class _UserPageState extends State<UserPage> {
             onTaskCompleted(index);
           }
         });
-
-        //_addLetter(index);
-      });
-    } else {
-      //_addLetter(index);
-    }
-  }
-
-  void onTaskCompleted(int index) {
-    if (!isQuestionClicked[index] && currentLetterIndex < targetWord
-        .replaceAll(' ', '')
-        .length) {
-      setState(() {
-        isQuestionClicked[index] = true;
-        String letter = targetWord.replaceAll(' ', '')[currentLetterIndex];
-
-        currentLetterIndex++;
-
-        if (currentLetterIndex < targetWord
-            .replaceAll(' ', '')
-            .length) {
-          if (letter == 'S') {
-            currentLetterIndex++;
-          }
-        }
       });
     }
   }
@@ -256,10 +168,32 @@ class _UserPageState extends State<UserPage> {
         btnOkText: 'skibidi',
         btnOkOnPress: () {},
       ).show();
-
     });
   }
 
+  void _onMapCreated(GoogleMapController controller) {
+    _mapController = controller;
+  }
+
+  List<String> _getDisplayedWord() {
+    List<String> words = targetWord.split(' ');
+    List<String> revealedWords = [];
+    int revealedCount = 0;
+
+    for (var word in words) {
+      String revealedWord = "";
+      for (int i = 0; i < word.length; i++) {
+        if (revealedCount < currentLetterIndex) {
+          revealedWord += word[i];
+          revealedCount++;
+        } else {
+          revealedWord += "_ ";
+        }
+      }
+      revealedWords.add(revealedWord);
+    }
+    return revealedWords;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -268,8 +202,7 @@ class _UserPageState extends State<UserPage> {
       appBar: AppBar(
         title: const Text(
           "Odkryj Hasło",
-          style: TextStyle(
-              color: Color(0xFFEFA00B), fontWeight: FontWeight.bold),
+          style: TextStyle(color: Color(0xFFEFA00B), fontWeight: FontWeight.bold),
         ),
         backgroundColor: const Color(0xFF0a344a),
         iconTheme: const IconThemeData(color: Color(0xFFEFA00B)),
@@ -310,26 +243,30 @@ class _UserPageState extends State<UserPage> {
                   onTap: isTaskNearby[index]
                       ? () => _navigateToGame(index)
                       : () {
+                    LatLng target = currentTaskLocations[index];
+                    _mapController?.animateCamera(
+                      CameraUpdate.newLatLngZoom(target, 17),
+                    );
+
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Row(
-                          children: [
+                          children: const [
                             Icon(Icons.error, color: Colors.white),
-                            // Dodaj ikonę (np. błąd)
-                            const SizedBox(width: 10),
-                            const Expanded(
+                            SizedBox(width: 10),
+                            Expanded(
                               child: Text(
                                 'Podejdź bliżej tego miejsca, aby odblokować to zadanie.',
                                 style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12
+                                  color: Colors.white,
+                                  fontSize: 12,
                                 ),
                               ),
                             ),
                           ],
                         ),
                         backgroundColor: Colors.red,
-                        duration: const Duration(seconds: 3),
+                        duration: Duration(seconds: 3),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10)),
                         ),
@@ -367,15 +304,13 @@ class _UserPageState extends State<UserPage> {
               line,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                letterSpacing: 0,
                 fontSize: 40,
                 fontWeight: FontWeight.bold,
                 color: Color(0xFFAFCBFF),
               ),
             ),
-          ).toList(),
+          ),
           const SizedBox(height: 50),
-          // Przycisk zmieniający lokalizacje w jednym wierszu
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -383,7 +318,7 @@ class _UserPageState extends State<UserPage> {
                 onPressed: () => _changeTaskLocations(1),
                 child: const Text("oryginalne"),
               ),
-              const SizedBox(width: 7), // Odstęp między przyciskami
+              const SizedBox(width: 7),
               ElevatedButton(
                 onPressed: () => _changeTaskLocations(2),
                 child: const Text("dom Alana"),
@@ -399,12 +334,11 @@ class _UserPageState extends State<UserPage> {
           SizedBox(
             height: 500,
             child: MapPage(
-                taskLocations: currentTaskLocations,
-                taskNames: questions,
-
+              taskLocations: currentTaskLocations,
+              taskNames: questions,
+              onMapCreated: _onMapCreated, // ✅ przekazujemy kontroler
             ),
           ),
-
         ],
       ),
     );
