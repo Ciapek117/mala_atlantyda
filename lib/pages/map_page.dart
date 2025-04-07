@@ -3,7 +3,14 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 
 class MapPage extends StatefulWidget {
-  const MapPage({super.key});
+  final List<LatLng> taskLocations;
+  final List<String> taskNames;
+
+  const MapPage({
+    super.key,
+    required this.taskLocations,
+    required this.taskNames,
+  });
 
   @override
   State<MapPage> createState() => _MapPageState();
@@ -12,41 +19,50 @@ class MapPage extends StatefulWidget {
 class _MapPageState extends State<MapPage> {
   GoogleMapController? _mapController;
   LatLng? _currentPosition;
+  final Set<Marker> _markers = {};
 
   @override
   void initState() {
     super.initState();
     _determinePosition();
+    _setMarkers();
+  }
+
+  void _setMarkers() {
+    setState(() {
+      _markers.clear();
+      for (int i = 0; i < widget.taskLocations.length; i++) {
+        _markers.add(
+          Marker(
+            markerId: MarkerId('marker_$i'),
+            position: widget.taskLocations[i],
+            infoWindow: InfoWindow(
+              title: widget.taskNames[i],
+            ),
+            icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
+          ),
+        );
+      }
+    });
   }
 
   Future<void> _determinePosition() async {
-    bool serviceEnabled;
-    LocationPermission permission;
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) return;
 
-    // Sprawdzenie, czy usługa lokalizacji jest włączona
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return; // Możesz pokazać komunikat dla użytkownika
-    }
-
-    // Sprawdzenie i żądanie uprawnień
-    permission = await Geolocator.checkPermission();
+    LocationPermission permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) return;
     }
 
-    if (permission == LocationPermission.deniedForever) {
-      return; // Nie można dalej kontynuować
-    }
+    if (permission == LocationPermission.deniedForever) return;
 
-    // Pobranie aktualnej pozycji
     Position position = await Geolocator.getCurrentPosition();
     setState(() {
       _currentPosition = LatLng(position.latitude, position.longitude);
     });
 
-    // Przesunięcie kamery
     if (_mapController != null) {
       _mapController!.animateCamera(
         CameraUpdate.newCameraPosition(
@@ -58,40 +74,28 @@ class _MapPageState extends State<MapPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xFF0c4767),
-      body: Center(
+    return _currentPosition == null
+        ? const Center(child: CircularProgressIndicator())
+        : Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: Color(0xFFA3822A), width: 3),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(15),
         child: SizedBox(
-          height: 500,
-          width: 500,
-          child: Column(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Color(0xFFA3822A), width: 3),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(15),
-                  child: SizedBox(
-                    height: 400,
-                    width: 380,
-                    child: _currentPosition == null
-                        ? const Center(child: CircularProgressIndicator())
-                        : GoogleMap(
-                      initialCameraPosition: CameraPosition(
-                        target: _currentPosition!,
-                        zoom: 15,
-                      ),
-                      myLocationEnabled: true,
-                      onMapCreated: (controller) {
-                        _mapController = controller;
-                      },
-                    ),
-                  ),
-                ),
-              ),
-            ],
+          height: 400,
+          width: 380,
+          child: GoogleMap(
+            initialCameraPosition: CameraPosition(
+              target: _currentPosition!,
+              zoom: 15,
+            ),
+            myLocationEnabled: true,
+            onMapCreated: (controller) {
+              _mapController = controller;
+            },
+            markers: _markers,
           ),
         ),
       ),

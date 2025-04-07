@@ -398,8 +398,13 @@ class _UserPageState extends State<UserPage> {
           const SizedBox(height: 50),
           SizedBox(
             height: 500,
-            child: const MapPage(),
+            child: MapPage(
+                taskLocations: currentTaskLocations,
+                taskNames: questions,
+
+            ),
           ),
+
         ],
       ),
     );
