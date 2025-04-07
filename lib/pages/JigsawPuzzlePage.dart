@@ -149,7 +149,7 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
             children: [
               SizedBox(height: 125),
               Text(
-                "Ułóż Puzle!",
+                "Ułóż Puzzle!",
                 style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Color(0xFFEFA00B)),
               ),
               Container(
