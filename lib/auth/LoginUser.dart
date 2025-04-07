@@ -1,9 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:geolocator/geolocator.dart';
+
 import 'package:mala_atlantyda/Widgets/AnimatedScreen.dart';
 import './UserPage.dart';
-
 import '../Widgets/CustomTextField.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -13,6 +14,36 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  @override
+  void initState() {
+    super.initState();
+    _requestLocationPermission();
+  }
+
+  Future<void> _requestLocationPermission() async {
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      await Geolocator.openLocationSettings();
+      return;
+    }
+
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        print('❌ Dostęp do lokalizacji został odrzucony.');
+        return;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      print('❌ Dostęp do lokalizacji został trwale odrzucony.');
+      return;
+    }
+
+    print('✅ Uprawnienia lokalizacji przyznane.');
+  }
 
   Future<void> login(String password) async {
     try {
@@ -28,8 +59,8 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-
- Widget build(BuildContext context) {
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Container(
@@ -65,19 +96,16 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: CustomTextField(
                           hint: "Enter Password",
                           label: "Password",
-                          //controller: _password,
                           isPassword: true,
                           color: Color(0xFFADE8F4)
                       ),
                     ),
                     SizedBox(height: 5),
-                    // Mniejszy odstęp między TextField a przyciskiem
                     SizedBox(
                       width: 230,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(
-                              0xff00bbc2), // Jasny niebieski kolor tła
+                          backgroundColor: Color(0xff00bbc2),
                         ),
                         child: Text(
                           "Zaloguj się",
@@ -87,7 +115,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               fontSize: 20
                           ),
                         ),
-                          onPressed: () => login("6TVB9L"),
+                        onPressed: () => login("6TVB9L"),
                       ),
                     ),
                   ],
