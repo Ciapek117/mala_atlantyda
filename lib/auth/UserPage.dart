@@ -32,7 +32,9 @@ class _UserPageState extends State<UserPage> {
   late List<bool> isTaskNearby;
   LatLng? _userPosition;
   List<LatLng> currentTaskLocations = [];
-  GoogleMapController? _mapController; // ✅ dodano kontroler mapy
+  GoogleMapController? _mapController;
+
+  bool _hasPendingCameraMove = false; // 🔧 nowa flaga
 
   final List<String> questions = [
     "Zejście Plaża (Puzzle)",
@@ -97,7 +99,9 @@ class _UserPageState extends State<UserPage> {
     isQuestionClicked = List.generate(questions.length, (_) => false);
     isTaskNearby = List.generate(questions.length, (_) => false);
     currentTaskLocations = taskLocations;
-    _checkUserProximity();
+
+    _checkPermissionAndInitLocation(); // zmodyfikowana metoda
+
     Timer.periodic(const Duration(seconds: 10), (_) => _checkUserProximity());
   }
 
@@ -116,6 +120,44 @@ class _UserPageState extends State<UserPage> {
       }
     });
   }
+
+  Future<void> _checkPermissionAndInitLocation() async {
+    LocationPermission permission = await Geolocator.checkPermission();
+
+    if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
+      permission = await Geolocator.requestPermission();
+    }
+
+    if (permission == LocationPermission.always || permission == LocationPermission.whileInUse) {
+      Position position = await Geolocator.getCurrentPosition();
+      setState(() {
+        _userPosition = LatLng(position.latitude, position.longitude);
+      });
+
+      if (_mapController != null) {
+        _mapController!.animateCamera(
+          CameraUpdate.newLatLngZoom(_userPosition!, 17),
+        );
+      } else {
+        _hasPendingCameraMove = true; // 🔧 zapamiętaj że trzeba przesunąć
+      }
+
+      _checkUserProximity();
+    }
+  }
+
+  void _onMapCreated(GoogleMapController controller) {
+    _mapController = controller;
+
+    if (_hasPendingCameraMove && _userPosition != null) {
+      _mapController!.animateCamera(
+        CameraUpdate.newLatLngZoom(_userPosition!, 17),
+      );
+      _hasPendingCameraMove = false; // 🔧 już przesunięte
+    }
+  }
+
+
 
   void onTaskCompleted(int index) {
     if (!isQuestionClicked[index] &&
@@ -171,10 +213,6 @@ class _UserPageState extends State<UserPage> {
     });
   }
 
-  void _onMapCreated(GoogleMapController controller) {
-    _mapController = controller;
-  }
-
   List<String> _getDisplayedWord() {
     List<String> words = targetWord.split(' ');
     List<String> revealedWords = [];
@@ -207,7 +245,7 @@ class _UserPageState extends State<UserPage> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: const Color(0xFF0a344a).withOpacity(0.80), // półprzezroczysty
+        backgroundColor: const Color(0xFF0a344a).withOpacity(0.80),
         elevation: 0,
         iconTheme: const IconThemeData(color: Color(0xFFEFA00B)),
       ),
@@ -273,7 +311,8 @@ class _UserPageState extends State<UserPage> {
                         backgroundColor: Colors.red,
                         duration: Duration(seconds: 3),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          borderRadius:
+                          BorderRadius.all(Radius.circular(10)),
                         ),
                         behavior: SnackBarBehavior.floating,
                         margin: const EdgeInsets.all(20),
@@ -294,27 +333,22 @@ class _UserPageState extends State<UserPage> {
   Widget _buildBody() {
     return Stack(
       children: [
-        // Tło – lokalny asset
         Positioned.fill(
           child: Image.asset(
-            'images/memory_tlo.png', // <-- Ścieżka do Twojego obrazka
+            'images/memory_tlo.png',
             fit: BoxFit.cover,
           ),
         ),
-
-        // Przykrycie półprzezroczystą warstwą, jeśli chcesz lepszy kontrast
         Positioned.fill(
           child: Container(
-            color: Colors.black.withOpacity(0.4), // opcjonalne
+            color: Colors.black.withOpacity(0.4),
           ),
         ),
-
-        // Treść strony
         Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(height: 100), // dystans od AppBar
+              const SizedBox(height: 100),
               const Text(
                 "HASŁO:",
                 style: TextStyle(
@@ -368,6 +402,5 @@ class _UserPageState extends State<UserPage> {
         ),
       ],
     );
-
   }
 }
