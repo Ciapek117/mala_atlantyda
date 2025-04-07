@@ -148,25 +148,30 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
           // Zawartość ekranu
           Column(
             children: [
-              SizedBox(height: 125),
+              SizedBox(height: 140),
               Text(
                 "Ułóż Puzzle!",
                 style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Color(0xFFEFA00B)),
               ),
-              Container(
-                margin: EdgeInsets.all(50.0),
-                padding: EdgeInsets.all(2.0),
+              SizedBox(
+                height: 25,
+              ),
+              Expanded(
+                child: Container(
+                  margin: EdgeInsets.all(50.0),
+                  padding: EdgeInsets.all(2.0),
 
-                child: AspectRatio(
-                  aspectRatio: 0.9,
-                  child: GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: gridSize,
+                  child: AspectRatio(
+                    aspectRatio: 0.9,
+                    child: GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: gridSize,
+                      ),
+                      itemCount: tileOrder.length,
+                      itemBuilder: (context, index) {
+                        return _buildTile(index);
+                      },
                     ),
-                    itemCount: tileOrder.length,
-                    itemBuilder: (context, index) {
-                      return _buildTile(index);
-                    },
                   ),
                 ),
               ),
