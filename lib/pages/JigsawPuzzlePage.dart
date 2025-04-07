@@ -147,17 +147,17 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
           // Zawartość ekranu
           Column(
             children: [
-              SizedBox(height: 140),
+              SizedBox(height: 125),
               Text(
                 "Ułóż Puzle!",
                 style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Color(0xFFEFA00B)),
               ),
               Container(
-                margin: EdgeInsets.all(40.0),
+                margin: EdgeInsets.all(50.0),
                 padding: EdgeInsets.all(2.0),
 
                 child: AspectRatio(
-                  aspectRatio: 1,
+                  aspectRatio: 0.9,
                   child: GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: gridSize,

@@ -47,9 +47,15 @@ class _HangmanGameState extends State<HangmanGame> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF0c4767),
       body: Stack(
         children: [
+          Positioned.fill(
+            child: Image.asset(
+              'images/hangman_tlo.png', // Ścieżka do obrazu w katalogu assets
+              fit: BoxFit.cover,
+            ),
+          ),
+          // Zawartość ekranu
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

@@ -114,49 +114,65 @@ class _MemoryGameScreenState extends State<MemoryGameScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFF0c4767),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+      body: Stack(
         children: [
-          SizedBox(height: 100,),
-          Text("Memory!", style: TextStyle(color: Color(0xFFEFA00B),fontSize: 50,
-                                            fontWeight: FontWeight.bold),),
-          SizedBox(height: 50,),
-          Expanded(
-            child: GridView.builder(
-              padding: EdgeInsets.all(16),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-              ),
-              itemCount: gameGrid.length,
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () => _flipCard(index),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Color(0xFF0075C4),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    alignment: Alignment.center,
-                    child: cardFlipped[index] || index == firstIndex || index == secondIndex
-                        ? ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Image.asset(
-                        gameGrid[index],
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                        height: double.infinity,
-                      ),
-                    )
-                        : Icon(Icons.question_mark, size: 32, color: Colors.white),
-                  ),
-                );
-              },
+          Positioned.fill(
+            child: Image.asset(
+              'images/memory_tlo.png', // Ścieżka do obrazu w katalogu assets
+              fit: BoxFit.cover,
             ),
           ),
+          Positioned.fill(
+            child: Container(
+              color: Colors.black.withOpacity(0.2),
+            ),
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(height: 100,),
+              Text("Memory!", style: TextStyle(color: Color(0xFFEFA00B),fontSize: 50,
+                  fontWeight: FontWeight.bold),),
+              SizedBox(height: 50,),
+              Expanded(
+                child: GridView.builder(
+                  padding: EdgeInsets.all(16),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                  ),
+                  itemCount: gameGrid.length,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () => _flipCard(index),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Color(0xFF0075C4),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        alignment: Alignment.center,
+                        child: cardFlipped[index] || index == firstIndex || index == secondIndex
+                            ? ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.asset(
+                            gameGrid[index],
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                            height: double.infinity,
+                          ),
+                        )
+                            : Icon(Icons.question_mark, size: 32, color: Colors.white),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+
         ],
-      ),
+      )
     );
   }
 }
