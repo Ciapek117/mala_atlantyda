@@ -51,8 +51,11 @@ class _QuestionPageState extends State<QuestionPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
+    return GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(), // schowanie klawiatury po tapnięciu poza
+        child: Scaffold(
+        resizeToAvoidBottomInset: false, // zapobiega przesuwaniu zawartości przy klawiaturze
+        body: Stack(
         children: [
           // Obraz tła
           Positioned.fill(
@@ -113,6 +116,7 @@ class _QuestionPageState extends State<QuestionPage> {
           ),
         ],
       ),
+        ),
     );
 
   }

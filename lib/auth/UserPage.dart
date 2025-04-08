@@ -465,7 +465,7 @@ class _UserPageState extends State<UserPage> {
                                   fontSize: 40, // Ensures consistency
                                   fontWeight: FontWeight.bold,
                                   color: Color(0xFFAFCBFF),
-                                  letterSpacing: 2,
+                                  letterSpacing: -1,
                                   shadows: [
                                     Shadow(
                                       blurRadius: 4,
@@ -500,7 +500,7 @@ class _UserPageState extends State<UserPage> {
               ),
               const SizedBox(height: 70),
               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.48,
+                height: MediaQuery.of(context).size.height * 0.42,
                 child: MapPage(
                   taskLocations: currentTaskLocations,
                   taskNames: questions,
