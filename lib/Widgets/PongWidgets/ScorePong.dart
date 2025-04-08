@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ScorePong extends StatelessWidget {
   final score;
@@ -14,7 +15,7 @@ class ScorePong extends StatelessWidget {
         child: Text(
             "Punkty: $score",
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: GoogleFonts.poppins(
               color: Color(0xFFefa00b),
               fontSize: 24,
               fontWeight: FontWeight.bold,

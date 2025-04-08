@@ -17,7 +17,7 @@ class PongLogic {
   double paddleX = -0.2;
   double paddleWidth = 0.4;
   int score = 0;
-  final int winScore = 3;
+  final int winScore = 5;
   int countdown = 3;
 
   final Function onGameStateChanged;

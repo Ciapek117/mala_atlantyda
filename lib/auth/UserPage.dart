@@ -88,7 +88,7 @@ class _UserPageState extends State<UserPage> {
 
   final List<LatLng> taskLocations3 = List.generate(
     12,
-        (_) => LatLng(54.47158802598502, 16.981100295406417),
+        (_) => LatLng(54.457912086191264, 16.995241472212303),
   );
 
   int currentLetterIndex = 0;

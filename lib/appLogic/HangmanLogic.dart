@@ -1,7 +1,7 @@
 import 'dart:math';
 
 class HangmanLogic {
-  final Set<String> wordsToGuess = {"FLUTTER", "KOPALNIA", "CZLOWIEK"};
+  final Set<String> wordsToGuess = {"SYRENKA", "STATEK", "ATLANTYDA", "MUSZELKA"};
   late String wordToGuess;
   late List<String> wordGuessed;
   late int lives;

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 import 'dart:async';
 import 'dart:math';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   runApp(PuzzleApp());
@@ -151,7 +152,7 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
               SizedBox(height: 140),
               Text(
                 "Ułóż Puzzle!",
-                style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold, color: Color(0xFFEFA00B)),
+                style: GoogleFonts.poppins(fontSize: 40, fontWeight: FontWeight.bold, color: Color(0xFFEFA00B)),
               ),
               SizedBox(
                 height: 25,
