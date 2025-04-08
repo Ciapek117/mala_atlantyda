@@ -33,8 +33,8 @@ class _UserPageState extends State<UserPage> {
   LatLng? _userPosition;
   List<LatLng> currentTaskLocations = [];
   GoogleMapController? _mapController;
-
-  bool _hasPendingCameraMove = false; // 🔧 nowa flaga
+  bool _hasPendingCameraMove = false;
+  bool isOriginalLocations = true;
 
   final List<String> questions = [
     "Zejście Plaża (Puzzle)",
@@ -83,10 +83,10 @@ class _UserPageState extends State<UserPage> {
 
   List<LatLng> taskLocations2 = [];
 
-  final List<LatLng> taskLocations3 = List.generate(
-    12,
-        (_) => LatLng(54.457912086191264, 16.995241472212303),
-  );
+  //final List<LatLng> taskLocations3 = List.generate(
+    //12,
+       // (_) => LatLng(54.457912086191264, 16.995241472212303),
+  //);
 
   int currentLetterIndex = 0;
 
@@ -208,11 +208,12 @@ class _UserPageState extends State<UserPage> {
     setState(() {
       if (choice == 1) {
         currentTaskLocations = taskLocations;
+        isOriginalLocations = true;
       } else if (choice == 2) {
         currentTaskLocations = taskLocations2;
-      } else if (choice == 3) {
-        currentTaskLocations = taskLocations3;
+        isOriginalLocations = false;
       }
+
       _checkUserProximity();
 
       AwesomeDialog(
@@ -226,6 +227,7 @@ class _UserPageState extends State<UserPage> {
       ).show();
     });
   }
+
 
   List<String> _getDisplayedWord() {
     List<String> words = targetWord.split(' ');
@@ -262,7 +264,27 @@ class _UserPageState extends State<UserPage> {
         backgroundColor: const Color(0xFF0a344a).withOpacity(0.80),
         elevation: 0,
         iconTheme: const IconThemeData(color: Color(0xFFEFA00B)),
+        actions: [
+          Row(
+            children: [
+              const Text("Tryb:", style: TextStyle(color: Color(0xFFEFA00B))),
+              Switch(
+                value: isOriginalLocations,
+                activeColor: const Color(0xFFEFA00B),
+                onChanged: (bool value) {
+                  setState(() {
+                    isOriginalLocations = value;
+                    currentTaskLocations = isOriginalLocations ? taskLocations : taskLocations2;
+                    _checkUserProximity();
+                  });
+                },
+              ),
+            ],
+          ),
+          const SizedBox(width: 8),
+        ],
       ),
+
       extendBodyBehindAppBar: true,
       drawer: _buildDrawer(),
       body: _buildBody(),
@@ -362,47 +384,71 @@ class _UserPageState extends State<UserPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(height: 100),
-              const Text(
-                "HASŁO:",
-                style: TextStyle(
-                  fontSize: 40,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFFEFA00B),
-                ),
-              ),
-              ..._getDisplayedWord().map(
-                    (line) => Text(
-                  line,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 40,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFFAFCBFF),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 50),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  ElevatedButton(
-                    onPressed: () => _changeTaskLocations(1),
-                    child: const Text("oryginalne"),
-                  ),
-                  const SizedBox(width: 7),
-                  ElevatedButton(
-                    onPressed: () => _changeTaskLocations(2),
-                    child: const Text("dom Alana"),
-                  ),
-                  const SizedBox(width: 7),
-                  ElevatedButton(
-                    onPressed: () => _changeTaskLocations(3),
-                    child: const Text("dom Martyny"),
+                  const SizedBox(height: 50),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF1A1A2E).withOpacity(0.50),
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.5),
+                          blurRadius: 12,
+                          offset: const Offset(0, 6),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      children: [
+                        const Text(
+                          "HASŁO:",
+                          style: TextStyle(
+                            fontSize: 44,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 2,
+                            color: Color(0xFFEFA00B),
+                            shadows: [
+                              Shadow(
+                                blurRadius: 8,
+                                color: Color(0xFFEF9B0F),
+                                offset: Offset(0, 0),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        ..._getDisplayedWord().map(
+                              (line) => Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 6.0),
+                            child: Text(
+                              line,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontSize: 40,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFFAFCBFF),
+                                letterSpacing: 2,
+                                shadows: [
+                                  Shadow(
+                                    blurRadius: 6,
+                                    color: Color(0xFF6CA0FF),
+                                    offset: Offset(0, 0),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
-              const SizedBox(height: 50),
+
+              const SizedBox(height: 70),
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.48,
                 child: MapPage(
