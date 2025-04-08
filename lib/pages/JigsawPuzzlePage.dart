@@ -149,33 +149,54 @@ class _PuzzleScreenState extends State<PuzzleScreen> {
           // Zawartość ekranu
           Column(
             children: [
-              SizedBox(height: 140),
+              SizedBox(height: 100),
               Text(
                 "Ułóż Puzzle!",
                 style: GoogleFonts.poppins(fontSize: 40, fontWeight: FontWeight.bold, color: Color(0xFFEFA00B)),
               ),
-              SizedBox(
-                height: 25,
-              ),
               Expanded(
                 child: Container(
-                  margin: EdgeInsets.all(50.0),
-                  padding: EdgeInsets.all(2.0),
-
-                  child: AspectRatio(
-                    aspectRatio: 0.9,
-                    child: GridView.builder(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: gridSize,
+                  margin: EdgeInsets.symmetric(horizontal: 20),
+                  child: Center(
+                    child: Container(
+                      width: 400,
+                      height: 400, // teraz pełne 400x400
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage("images/puzzle_ramka.png"),
+                          fit: BoxFit.fill,
+                        ),
                       ),
-                      itemCount: tileOrder.length,
-                      itemBuilder: (context, index) {
-                        return _buildTile(index);
-                      },
+                      child: Center(
+                        child: Padding(
+                          padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.04),
+                        child: SizedBox(
+                          width: 300,
+                          height: 300,
+                          child: GridView.builder(
+                            padding: EdgeInsets.zero,
+                            physics: NeverScrollableScrollPhysics(),
+                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: gridSize,
+                              mainAxisSpacing: 0,
+                              crossAxisSpacing: 0,
+                            ),
+                            itemCount: tileOrder.length,
+                            itemBuilder: (context, index) {
+                              return _buildTile(index);
+                            },
+                          ),
+                        ),
+                        ),
+                      ),
                     ),
+
                   ),
                 ),
               ),
+
+              SizedBox(height: 130),
+
             ],
           ),
         ],

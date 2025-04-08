@@ -81,10 +81,7 @@ class _UserPageState extends State<UserPage> {
     LatLng(54.58703469164184, 16.848828354634747), // Bunkry Bluchera
   ];
 
-  final List<LatLng> taskLocations2 = List.generate(
-    12,
-        (_) => LatLng(54.46356746843195, 17.013808329119247),
-  );
+  List<LatLng> taskLocations2 = [];
 
   final List<LatLng> taskLocations3 = List.generate(
     12,
@@ -96,6 +93,7 @@ class _UserPageState extends State<UserPage> {
   @override
   void initState() {
     super.initState();
+    setUserLocations();
     isQuestionClicked = List.generate(questions.length, (_) => false);
     isTaskNearby = List.generate(questions.length, (_) => false);
     currentTaskLocations = taskLocations;
@@ -120,6 +118,22 @@ class _UserPageState extends State<UserPage> {
       }
     });
   }
+
+  Future<LatLng> getUserLocation() async {
+    LocationPermission permission = await Geolocator.requestPermission();
+    Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+    return LatLng(position.latitude, position.longitude);
+  }
+
+  Future<void> setUserLocations() async {
+    LatLng userLocation = await getUserLocation();
+    setState(() {
+      taskLocations2 = List.generate(12, (_) => userLocation);
+    });
+  }
+
 
   Future<void> _checkPermissionAndInitLocation() async {
     LocationPermission permission = await Geolocator.checkPermission();
@@ -390,7 +404,7 @@ class _UserPageState extends State<UserPage> {
               ),
               const SizedBox(height: 50),
               SizedBox(
-                height: 500,
+                height: MediaQuery.of(context).size.height * 0.48,
                 child: MapPage(
                   taskLocations: currentTaskLocations,
                   taskNames: questions,
