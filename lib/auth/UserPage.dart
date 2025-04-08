@@ -4,6 +4,7 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:lottie/lottie.dart';
 
 import 'package:mala_atlantyda/pages/CodeUnlockPage.dart';
 import 'package:mala_atlantyda/pages/GrandLubiczPage.dart';
@@ -17,6 +18,7 @@ import 'package:mala_atlantyda/pages/HangmanGame.dart';
 import 'package:mala_atlantyda/pages/MemoryGame.dart';
 import 'package:mala_atlantyda/pages/PongGame.dart';
 import 'package:mala_atlantyda/pages/LatarniaMorskaPage.dart';
+import '../pages/CelebrationPage.dart';
 import '../pages/HiddenObjectGame.dart';
 
 class UserPage extends StatefulWidget {
@@ -35,6 +37,9 @@ class _UserPageState extends State<UserPage> {
   GoogleMapController? _mapController;
   bool _hasPendingCameraMove = false;
   bool isOriginalLocations = true;
+  bool showFirstAnimation = false;
+  bool showSecondAnimation = false;
+  bool darkenScreen = false;
 
   final List<String> questions = [
     "Zejście Plaża (Puzzle)",
@@ -67,25 +72,37 @@ class _UserPageState extends State<UserPage> {
   ];
 
   final List<LatLng> taskLocations = [
-    LatLng(54.591213630954016, 16.888239854634985), // Zejście Plaża
-    LatLng(54.5790769205611, 16.86176516965411), // Dworzec
-    LatLng(54.582995048803596, 16.858182354634433), // Lokalna organizacja turystyczna
-    LatLng(54.583563811001504, 16.86075809696267), // Ratusz
-    LatLng(54.5813159732441, 16.873311283470326), // Osir
-    LatLng(54.58802419058503, 16.85461349696294), // Latarnia Morska
-    LatLng(54.58430823844433, 16.869021398814247), // Grand Lubicz
-    LatLng(54.58747161136326, 16.870804296962895), // Park Linowy
-    LatLng(54.581695204521196, 16.859324414307892), // Chomczyńscy
-    LatLng(54.578803537815986, 16.842657483470127), // Seekenmoor
-    LatLng(54.58287368931065, 16.858247446170786), // Mistral
-    LatLng(54.58703469164184, 16.848828354634747), // Bunkry Bluchera
+    LatLng(54.591213630954016, 16.888239854634985),
+    // Zejście Plaża
+    LatLng(54.5790769205611, 16.86176516965411),
+    // Dworzec
+    LatLng(54.582995048803596, 16.858182354634433),
+    // Lokalna organizacja turystyczna
+    LatLng(54.583563811001504, 16.86075809696267),
+    // Ratusz
+    LatLng(54.5813159732441, 16.873311283470326),
+    // Osir
+    LatLng(54.58802419058503, 16.85461349696294),
+    // Latarnia Morska
+    LatLng(54.58430823844433, 16.869021398814247),
+    // Grand Lubicz
+    LatLng(54.58747161136326, 16.870804296962895),
+    // Park Linowy
+    LatLng(54.581695204521196, 16.859324414307892),
+    // Chomczyńscy
+    LatLng(54.578803537815986, 16.842657483470127),
+    // Seekenmoor
+    LatLng(54.58287368931065, 16.858247446170786),
+    // Mistral
+    LatLng(54.58703469164184, 16.848828354634747),
+    // Bunkry Bluchera
   ];
 
   List<LatLng> taskLocations2 = [];
 
   //final List<LatLng> taskLocations3 = List.generate(
-    //12,
-       // (_) => LatLng(54.457912086191264, 16.995241472212303),
+  //12,
+  // (_) => LatLng(54.457912086191264, 16.995241472212303),
   //);
 
   int currentLetterIndex = 0;
@@ -138,11 +155,13 @@ class _UserPageState extends State<UserPage> {
   Future<void> _checkPermissionAndInitLocation() async {
     LocationPermission permission = await Geolocator.checkPermission();
 
-    if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
+    if (permission == LocationPermission.denied ||
+        permission == LocationPermission.deniedForever) {
       permission = await Geolocator.requestPermission();
     }
 
-    if (permission == LocationPermission.always || permission == LocationPermission.whileInUse) {
+    if (permission == LocationPermission.always ||
+        permission == LocationPermission.whileInUse) {
       Position position = await Geolocator.getCurrentPosition();
       setState(() {
         _userPosition = LatLng(position.latitude, position.longitude);
@@ -172,20 +191,47 @@ class _UserPageState extends State<UserPage> {
   }
 
 
-
   void onTaskCompleted(int index) {
     if (!isQuestionClicked[index] &&
-        currentLetterIndex < targetWord.replaceAll(' ', '').length) {
+        currentLetterIndex < targetWord
+            .replaceAll(' ', '')
+            .length) {
       setState(() {
         isQuestionClicked[index] = true;
         String letter = targetWord.replaceAll(' ', '')[currentLetterIndex];
         currentLetterIndex++;
 
-        if (letter == 'S' && currentLetterIndex < targetWord.replaceAll(' ', '').length) {
+        if (letter == 'S' && currentLetterIndex < targetWord
+            .replaceAll(' ', '')
+            .length) {
           currentLetterIndex++;
         }
       });
     }
+
+    if (isQuestionClicked.every((element) => element == true)) {
+      showCelebrationAnimation();
+    }
+  }
+
+  void showCelebrationAnimation() async {
+    // Show celebration animation
+    setState(() {
+      showFirstAnimation = true;
+    });
+
+    Future.delayed(const Duration(seconds: 2), () {
+      setState(() {
+        showFirstAnimation = false;
+        darkenScreen = true;
+      });
+
+      Future.delayed(const Duration(milliseconds: 300), () {
+        setState(() {
+          showSecondAnimation = true;
+        });
+      });
+    });
   }
 
   void _navigateToGame(int index) {
@@ -254,37 +300,35 @@ class _UserPageState extends State<UserPage> {
     return Scaffold(
       backgroundColor: const Color(0xFF0c4767),
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           "Odkryj Hasło",
           style: TextStyle(
-            color: Color(0xFFEFA00B),
+            color: showSecondAnimation ? Colors.transparent : Color(0xFFEFA00B),
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: const Color(0xFF0a344a).withOpacity(0.80),
+        backgroundColor: showSecondAnimation ? Colors.transparent : Color(0xFF0a344a).withOpacity(0.80),
         elevation: 0,
-        iconTheme: const IconThemeData(color: Color(0xFFEFA00B)),
+        iconTheme: showSecondAnimation ? null : IconThemeData(color: Color(0xFFEFA00B)),
         actions: [
-          Row(
-            children: [
-              const Text("Tryb:", style: TextStyle(color: Color(0xFFEFA00B))),
-              Switch(
-                value: isOriginalLocations,
-                activeColor: const Color(0xFFEFA00B),
-                onChanged: (bool value) {
-                  setState(() {
-                    isOriginalLocations = value;
-                    currentTaskLocations = isOriginalLocations ? taskLocations : taskLocations2;
-                    _checkUserProximity();
-                  });
-                },
-              ),
-            ],
-          ),
+          // Jeżeli showSecondAnimation jest false, wyświetlamy przycisk przełącznika
+          if (!showSecondAnimation) ...[
+            const Text("Tryb:", style: TextStyle(color: Color(0xFFEFA00B))),
+            Switch(
+              value: isOriginalLocations,
+              activeColor: const Color(0xFFEFA00B),
+              onChanged: (bool value) {
+                setState(() {
+                  isOriginalLocations = value;
+                  currentTaskLocations = isOriginalLocations ? taskLocations : taskLocations2;
+                  _checkUserProximity();
+                });
+              },
+            ),
+          ],
           const SizedBox(width: 8),
         ],
       ),
-
       extendBodyBehindAppBar: true,
       drawer: _buildDrawer(),
       body: _buildBody(),
@@ -347,8 +391,7 @@ class _UserPageState extends State<UserPage> {
                         backgroundColor: Colors.red,
                         duration: Duration(seconds: 3),
                         shape: RoundedRectangleBorder(
-                          borderRadius:
-                          BorderRadius.all(Radius.circular(10)),
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
                         ),
                         behavior: SnackBarBehavior.floating,
                         margin: const EdgeInsets.all(20),
@@ -369,18 +412,8 @@ class _UserPageState extends State<UserPage> {
   Widget _buildBody() {
     return Stack(
       children: [
+        // Main body content (first, at bottom)
         Positioned.fill(
-          child: Image.asset(
-            'images/memory_tlo.png',
-            fit: BoxFit.cover,
-          ),
-        ),
-        Positioned.fill(
-          child: Container(
-            color: Colors.black.withOpacity(0.4),
-          ),
-        ),
-        Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -423,31 +456,48 @@ class _UserPageState extends State<UserPage> {
                         ..._getDisplayedWord().map(
                               (line) => Padding(
                             padding: const EdgeInsets.symmetric(vertical: 6.0),
-                            child: Text(
-                              line,
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                fontSize: 40,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFFAFCBFF),
-                                letterSpacing: 2,
-                                shadows: [
-                                  Shadow(
-                                    blurRadius: 6,
-                                    color: Color(0xFF6CA0FF),
-                                    offset: Offset(0, 0),
-                                  ),
-                                ],
+                            child: SizedBox(
+                              width: double.infinity, // Ensures consistent width
+                              child: Text(
+                                line,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  fontSize: 40, // Ensures consistency
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFFAFCBFF),
+                                  letterSpacing: 2,
+                                  shadows: [
+                                    Shadow(
+                                      blurRadius: 4,
+                                      color: Color(0xFF6CA0FF),
+                                      offset: Offset(0, 0),
+                                    ),
+                                    Shadow(
+                                      blurRadius: 8,
+                                      color: Color(0xFF6CA0FF),
+                                      offset: Offset(0, 0),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
                         ),
+
                       ],
                     ),
+
                   ),
                 ],
               ),
-
+              ElevatedButton(
+                onPressed: () {
+                  for (int i = 0; i < isQuestionClicked.length; i++) {
+                    onTaskCompleted(i);
+                  }
+                },
+                child: Text("zrób wszystkie zadania"),
+              ),
               const SizedBox(height: 70),
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.48,
@@ -460,6 +510,83 @@ class _UserPageState extends State<UserPage> {
             ],
           ),
         ),
+
+        // Dark overlay when switching to second animation
+        if (darkenScreen && !showFirstAnimation)
+          Positioned.fill(
+            child: Container(
+              color: Colors.black.withOpacity(0.5),
+            ),
+          ),
+
+        if (showSecondAnimation) ...[
+          // Ciemne tło
+          Positioned.fill(
+            child: IgnorePointer(
+              child: Container(
+                color: Colors.black.withOpacity(0.8),
+              ),
+            ),
+          ),
+
+          // Wyśrodkowana animacja o estetycznym rozmiarze
+          Positioned.fill(
+            child: IgnorePointer(
+              child: Center(
+                child: Lottie.asset(
+                  'assets/dancing.json',
+                  width: 250, // możesz zmienić rozmiar wg uznania
+                  height: 250,
+                  fit: BoxFit.contain,
+                ),
+              ),
+            ),
+          ),
+
+          // Tekst "Gratulacje!" poniżej animacji
+          Positioned.fill(
+            child: IgnorePointer(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 300), // odstęp od animacji
+                  Text(
+                    'Gratulacje!',
+                    style: TextStyle(
+                      fontSize: 40,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFFAFCBFF),
+                      shadows: [
+                        Shadow(
+                          blurRadius: 16,
+                          color: Colors.black87,
+                          offset: Offset(3, 3),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+
+            ),
+          ),
+        ]
+        ,
+        // First animation (should be on top)
+        if (showFirstAnimation)
+          Positioned.fill(
+            child: IgnorePointer(
+              child: Stack(
+                children: [
+                  // Animacja na pełnym ekranie
+                  Lottie.asset(
+                    'assets/celebration.json',
+                    fit: BoxFit.cover,
+                  ),
+                ],
+              ),
+            ),
+          ),
       ],
     );
   }
