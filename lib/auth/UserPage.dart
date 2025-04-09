@@ -490,14 +490,6 @@ class _UserPageState extends State<UserPage> {
                   ),
                 ],
               ),
-              ElevatedButton(
-                onPressed: () {
-                  for (int i = 0; i < isQuestionClicked.length; i++) {
-                    onTaskCompleted(i);
-                  }
-                },
-                child: Text("zrób wszystkie zadania"),
-              ),
               const SizedBox(height: 70),
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.42,
