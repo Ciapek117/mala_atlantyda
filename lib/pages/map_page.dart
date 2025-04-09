@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -7,13 +8,13 @@ import 'package:http/http.dart' as http;
 class MapPage extends StatefulWidget {
   final List<LatLng> taskLocations;
   final List<String> taskNames;
-  final Function(GoogleMapController)? onMapCreated; // ✅ dodano
+  final Function(GoogleMapController)? onMapCreated;
 
   const MapPage({
     super.key,
     required this.taskLocations,
     required this.taskNames,
-    this.onMapCreated, // ✅ dodano
+    this.onMapCreated,
   });
 
   @override
@@ -27,11 +28,20 @@ class _MapPageState extends State<MapPage> {
   final Set<Polyline> _polylines = {};
   final String _googleApiKey = 'AIzaSyBBIiosm_7Yl46uYsFy5lUdwj0DLUxSeVk';
 
+  LatLng? _currentDestination;
+  StreamSubscription<Position>? _positionStream;
+
   @override
   void initState() {
     super.initState();
-    _determinePosition();
+    _startLocationUpdates();
     _setMarkers();
+  }
+
+  @override
+  void dispose() {
+    _positionStream?.cancel();
+    super.dispose();
   }
 
   void _setMarkers() {
@@ -52,34 +62,33 @@ class _MapPageState extends State<MapPage> {
     setState(() {});
   }
 
-  Future<void> _determinePosition() async {
-    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) return;
+  void _startLocationUpdates() {
+    _positionStream = Geolocator.getPositionStream(
+      locationSettings: const LocationSettings(
+        accuracy: LocationAccuracy.high,
+        distanceFilter: 10,
+      ),
+    ).listen((Position position) {
+      setState(() {
+        _currentPosition = LatLng(position.latitude, position.longitude);
+      });
 
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) return;
-    }
+      if (_mapController != null) {
+        _mapController!.animateCamera(
+          CameraUpdate.newLatLng(_currentPosition!),
+        );
+      }
 
-    if (permission == LocationPermission.deniedForever) return;
-
-    Position position = await Geolocator.getCurrentPosition();
-    setState(() {
-      _currentPosition = LatLng(position.latitude, position.longitude);
+      if (_currentDestination != null) {
+        _createRoute(_currentDestination!);
+      }
     });
-
-    if (_mapController != null) {
-      _mapController!.animateCamera(
-        CameraUpdate.newCameraPosition(
-          CameraPosition(target: _currentPosition!, zoom: 15),
-        ),
-      );
-    }
   }
 
   Future<void> _createRoute(LatLng destination) async {
     if (_currentPosition == null) return;
+
+    _currentDestination = destination;
 
     final origin = '${_currentPosition!.latitude},${_currentPosition!.longitude}';
     final dest = '${destination.latitude},${destination.longitude}';
@@ -168,7 +177,7 @@ class _MapPageState extends State<MapPage> {
             onMapCreated: (controller) {
               _mapController = controller;
               if (widget.onMapCreated != null) {
-                widget.onMapCreated!(controller); // ✅ przekazanie dalej
+                widget.onMapCreated!(controller);
               }
             },
             markers: _markers,

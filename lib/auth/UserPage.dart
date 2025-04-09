@@ -42,18 +42,18 @@ class _UserPageState extends State<UserPage> {
   bool darkenScreen = false;
 
   final List<String> questions = [
-    "Zejście Plaża (Puzzle)",
-    "Dworzec (Wisielec)",
-    "Lokalna organizacja turystyczna (Memory)",
-    "Ratusz (Dopasuj miasta do km)",
-    "Osir (Pong)",
-    "Latarnia Morska (Pytanie)",
-    "Grand Lubicz (Pytanie)",
-    "Park Linowy (Zagadka)",
-    "Chomczyńscy (Kod)",
-    "Seekenmoor (Znajdźki)",
-    "Mistral (Pytania)",
-    "Bunkry Bluchera (Rebus)"
+    "Zejście Plaża",
+    "Dworzec",
+    "Lokalna organizacja turystyczna",
+    "Ratusz",
+    "Osir",
+    "Latarnia Morska",
+    "Grand Lubicz",
+    "Park Linowy",
+    "Chomczyńscy",
+    "Seekenmoor",
+    "Mistral",
+    "Bunkry Bluchera"
   ];
 
   final List<Widget> gamePages = [
@@ -88,13 +88,13 @@ class _UserPageState extends State<UserPage> {
     // Grand Lubicz
     LatLng(54.58747161136326, 16.870804296962895),
     // Park Linowy
-    LatLng(54.581695204521196, 16.859324414307892),
+    LatLng(54.58849080853478, 16.859105763374107),
     // Chomczyńscy
     LatLng(54.578803537815986, 16.842657483470127),
     // Seekenmoor
-    LatLng(54.58287368931065, 16.858247446170786),
+    LatLng(54.584789643699764, 16.85729832647877),
     // Mistral
-    LatLng(54.58703469164184, 16.848828354634747),
+    LatLng(54.586012002242, 16.849496477696533),
     // Bunkry Bluchera
   ];
 
