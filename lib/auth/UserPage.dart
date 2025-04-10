@@ -412,7 +412,18 @@ class _UserPageState extends State<UserPage> {
   Widget _buildBody() {
     return Stack(
       children: [
-        // Main body content (first, at bottom)
+        Positioned.fill(
+          child: Image.asset(
+            'images/memory_tlo.png',
+            fit: BoxFit.cover,
+          ),
+        ),
+        Positioned.fill(
+          child: Container(
+            color: Colors.black.withOpacity(0.4),
+          ),
+        ),
+
         Positioned.fill(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
